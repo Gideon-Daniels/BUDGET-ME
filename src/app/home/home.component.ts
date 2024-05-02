@@ -7,13 +7,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  constructor(private route: Router) {}
+  constructor(private router: Router) {}
 
   navigateToAddEdit() {
-    this.route.navigate(['/add-edit']);
+    this.router.navigate(['/add-edit']);
   }
 
   navigateToReports() {
-    this.route.navigate(['/reports']);
+    this.router.navigate(['/reports']);
   }
 }
