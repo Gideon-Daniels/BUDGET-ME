@@ -1,6 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
+  }
+}
 
 @Component({
   selector: 'app-add-edit',
@@ -12,9 +35,17 @@ export class AddEditComponent implements OnInit {
   addEditForm: FormGroup = new FormGroup({});
 
   constructor(private router: Router) {}
+
   ngOnInit(): void {
     this.initForm();
   }
+
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+
+  matcher = new MyErrorStateMatcher();
 
   initForm() {
     this.addEditForm = new FormGroup({

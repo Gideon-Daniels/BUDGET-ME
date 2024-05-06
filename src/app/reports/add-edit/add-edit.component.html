@@ -1,1 +1,42 @@
-<button (click)="back()"> BACK </button>
+<button mat-button (click)="back()"> BACK</button>
+
+<form class="form-container">
+  <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-label>Title <span class="important">*</span></mat-label>
+    <input matInput placeholder="Name of your report">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-label>Amount <span class="important">*</span></mat-label>
+    <input matInput placeholder="ex. R100">
+    <!--  todo only show prefix when input is touched-->
+    <!--    <span matTextPrefix>R&nbsp;</span>-->
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-label>Type</mat-label>
+    <mat-select appearance="outline" placeholder="ex. Expense">
+      <mat-option value="one">Income</mat-option>
+      <mat-option value="two">Expense</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-label>Category</mat-label>
+    <mat-select appearance="outline" placeholder="ex. Food">
+      <mat-option value="one">Home</mat-option>
+      <mat-option value="two">Salary</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-label>Description</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
+
+  <div>
+    <button mat-flat-button color="primary" type="submit">CREATE REPORT</button>
+    <button mat-flat-button color="warn" type="button">CANCEL</button>
+  </div>
+
+</form>

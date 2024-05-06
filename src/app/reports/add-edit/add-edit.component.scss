@@ -1,0 +1,29 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.important {
+  color: red;
+}
+
+.example-form {
+  width: 400px;
+  //max-height: 46px !important;
+}
+
+.form {
+  padding: 20px;
+  height: 200px;
+}
+
+//.example-full-width {
+//  width: 100%;
+//}
+
+//:host {
+//  display: flex;
+//  flex-direction: column;
+//  align-items: flex-start;
+//}
