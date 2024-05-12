@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormArray,
   FormControl,
   FormGroup,
   FormGroupDirective,
   NgForm,
-  Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -33,6 +31,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class AddEditComponent implements OnInit {
   inEditMode: boolean = false;
   addEditForm: FormGroup = new FormGroup({});
+  types: string[] = ['Expense', 'Income'];
+  categories: string[] = ['Salary', 'Home', 'Groceries'];
 
   constructor(private router: Router) {}
 
@@ -40,29 +40,22 @@ export class AddEditComponent implements OnInit {
     this.initForm();
   }
 
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-
-  matcher = new MyErrorStateMatcher();
-
   initForm() {
     this.addEditForm = new FormGroup({
       title: new FormControl(''),
       amount: new FormControl(''),
-      typpe: new FormControl(''),
-      category: new FormArray([new FormControl('')]),
-      date: new FormGroup({
-        day: new FormControl(''),
-        month: new FormControl(''),
-        year: new FormControl(''),
-      }),
+      type: new FormControl(this.types[0]),
+      category: new FormControl(this.categories[0]),
+      date: new FormControl(''),
       description: new FormControl(''),
     });
   }
 
   back() {
     this.router.navigate(['/']);
+  }
+
+  onSubmit() {
+    console.log(this.addEditForm);
   }
 }

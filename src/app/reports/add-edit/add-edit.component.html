@@ -1,37 +1,42 @@
 <button mat-button (click)="back()"> BACK</button>
 
-<form class="form-container">
+<form [formGroup]="addEditForm" class="form-container" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="outline" class="example-form" floatLabel="always">
     <mat-label>Title <span class="important">*</span></mat-label>
-    <input matInput placeholder="Name of your report">
+    <input matInput placeholder="Name of your report" formControlName="title">
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="example-form" floatLabel="always">
     <mat-label>Amount <span class="important">*</span></mat-label>
-    <input matInput placeholder="ex. R100">
+    <input matInput placeholder="ex. R100" formControlName="amount">
     <!--  todo only show prefix when input is touched-->
     <!--    <span matTextPrefix>R&nbsp;</span>-->
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="example-form" floatLabel="always">
     <mat-label>Type</mat-label>
-    <mat-select appearance="outline" placeholder="ex. Expense">
-      <mat-option value="one">Income</mat-option>
-      <mat-option value="two">Expense</mat-option>
+    <mat-select appearance="outline" placeholder="ex. Expense" formControlName="type">
+      <mat-option *ngFor="let type of types" [value]="type">{{ type }}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="example-form" floatLabel="always">
     <mat-label>Category</mat-label>
-    <mat-select appearance="outline" placeholder="ex. Food">
-      <mat-option value="one">Home</mat-option>
-      <mat-option value="two">Salary</mat-option>
+    <mat-select appearance="outline" [placeholder]="categories[0]" formControlName="category">
+      <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
     </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always" class="example-form">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose your date">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="example-form" floatLabel="always">
     <mat-label>Description</mat-label>
-    <textarea matInput></textarea>
+    <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
 
   <div>
