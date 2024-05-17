@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ReportsComponent } from './reports/reports.component';
 import { AddEditReportComponent } from './reports/add-edit-report/add-edit-report.component';
+import { ReportsGridComponent } from './reports/reports-grid/reports-grid.component';
 
 const routes: Routes = [
   {
@@ -11,8 +12,17 @@ const routes: Routes = [
     redirectTo: '/home',
   },
   { path: 'home', component: HomeComponent },
-  { path: 'add-edit-report', component: AddEditReportComponent },
-  { path: 'reports', component: ReportsComponent },
+  {
+    path: 'reports',
+    children: [
+      { path: '', component: ReportsGridComponent },
+      {
+        path: 'add-edit-report',
+        component: AddEditReportComponent,
+      },
+    ],
+    component: ReportsComponent,
+  },
 ];
 
 @NgModule({

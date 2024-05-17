@@ -6,10 +6,4 @@ import { Router } from '@angular/router';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],
 })
-export class ReportsComponent {
-  constructor(private router: Router) {}
-
-  navigateToHome() {
-    this.router.navigate(['/']);
-  }
-}
+export class ReportsComponent {}
