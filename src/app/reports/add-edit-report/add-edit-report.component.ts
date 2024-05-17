@@ -25,11 +25,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-add-edit',
-  templateUrl: './add-edit.component.html',
-  styleUrls: ['./add-edit.component.scss'],
+  selector: 'app-add-edit-report',
+  templateUrl: './add-edit-report.component.html',
+  styleUrls: ['./add-edit-report.component.scss'],
 })
-export class AddEditComponent implements OnInit {
+export class AddEditReportComponent implements OnInit {
   inEditMode: boolean = false;
   addEditForm: FormGroup = new FormGroup({});
   types: string[] = ['Expense', 'Income'];
@@ -48,6 +48,7 @@ export class AddEditComponent implements OnInit {
       type: new FormControl(this.types[0]),
       category: new FormControl(this.categories[0]),
       date: new FormControl(''),
+      description: new FormControl(''),
     });
   }
 

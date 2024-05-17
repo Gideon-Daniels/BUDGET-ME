@@ -10,7 +10,7 @@ export class HomeComponent {
   constructor(private router: Router) {}
 
   navigateToAddEdit() {
-    this.router.navigate(['/add-edit']);
+    this.router.navigate(['/add-edit-report']);
   }
 
   navigateToReports() {

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ReportsComponent } from './reports/reports.component';
-import { AddEditComponent } from './reports/add-edit/add-edit.component';
+import { AddEditReportComponent } from './reports/add-edit-report/add-edit-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
@@ -20,13 +20,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { HotTableModule } from '@handsontable/angular';
+import { ReportsGridComponent } from './reports/reports-grid/reports-grid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ReportsComponent,
-    AddEditComponent,
+    AddEditReportComponent,
+    ReportsGridComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatListModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    HotTableModule,
   ],
   providers: [
     // globally cause input errors to show when the input is dirty and invalid.
