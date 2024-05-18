@@ -1,33 +1,21 @@
-export interface IReport {
+export class Report {
   title: string;
   amount: string;
-  type: string;
+  typeOfReport: string;
   category: string;
-  date: Date;
-  description: string;
-}
-
-export class Report implements IReport {
-  public title: string;
-  public amount: string;
-  public type: string;
-  public category: string;
-  public date: Date;
-  public description: string;
+  dateOfReport: Date;
 
   constructor(
     title: string,
     amount: string,
-    type: string,
+    typeOfReport: string,
     category: string,
     date: Date,
-    description: string,
   ) {
     this.title = title;
     this.amount = amount;
-    this.type = type;
+    this.typeOfReport = typeOfReport;
     this.category = category;
-    this.date = date;
-    this.description = description;
+    this.dateOfReport = date;
   }
 }

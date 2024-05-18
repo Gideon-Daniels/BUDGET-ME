@@ -22,6 +22,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { HotTableModule } from '@handsontable/angular';
 import { ReportsGridComponent } from './reports/reports-grid/reports-grid.component';
+import { registerAllModules } from 'handsontable/registry';
+
+registerAllModules();
 
 @NgModule({
   declarations: [

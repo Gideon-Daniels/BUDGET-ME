@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { IReport } from '../report.model';
+import { Report } from '../report.model';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -42,13 +42,13 @@ export class AddEditReportComponent implements OnInit {
   }
 
   initForm() {
+    this.inEditMode = false;
     this.addEditForm = new FormGroup({
       title: new FormControl(''),
       amount: new FormControl(''),
       type: new FormControl(this.types[0]),
       category: new FormControl(this.categories[0]),
       date: new FormControl(''),
-      description: new FormControl(''),
     });
   }
 
@@ -57,7 +57,8 @@ export class AddEditReportComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.addEditForm);
-    const report = this.addEditForm.value as IReport;
+    const { title, amount, type, category, date } = this.addEditForm.value;
+    const report: Report = new Report(title, amount, type, category, date);
+    console.log(report);
   }
 }
