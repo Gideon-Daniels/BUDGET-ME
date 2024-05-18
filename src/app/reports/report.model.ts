@@ -1,21 +1,21 @@
 export class Report {
   title: string;
-  amount: string;
-  typeOfReport: string;
   category: string;
-  dateOfReport: Date;
+  type: string;
+  date: string;
+  amount: string;
 
   constructor(
     title: string,
-    amount: string,
-    typeOfReport: string,
     category: string,
-    date: Date,
+    typeOfReport: string,
+    date: string,
+    amount: string,
   ) {
     this.title = title;
-    this.amount = amount;
-    this.typeOfReport = typeOfReport;
     this.category = category;
-    this.dateOfReport = date;
+    this.type = typeOfReport;
+    this.date = date;
+    this.amount = amount;
   }
 }

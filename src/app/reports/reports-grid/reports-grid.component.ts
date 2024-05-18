@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import Handsontable from 'handsontable';
+import { ReportsService } from '../reports.service';
 
 @Component({
   selector: 'app-reports-grid',
@@ -8,39 +9,47 @@ import Handsontable from 'handsontable';
   styleUrls: ['./reports-grid.component.scss'],
 })
 export class ReportsGridComponent {
-  hotSettings: Handsontable.GridSettings = {
-    startRows: 5,
-    startCols: 9,
-    colHeaders: [' ', 'Title', 'Category', 'Type', 'Date', 'Amount', 'Edit'],
-    editor: false,
-    colWidths: 100,
-    rowHeights: 40,
-    stretchH: 'all',
-    width: '100%',
-    autoWrapRow: true,
-    autoWrapCol: true,
-    className: 'htCenter htMiddle',
-    licenseKey: 'non-commercial-and-evaluation',
-  };
+  hotSettings: Handsontable.GridSettings = {};
   id = 'reports-grid';
 
-  constructor(private router: Router) {
-    const data = {
-      '1': {
-        checked: 'unchecked',
-        title: 'Shoprite Shopping',
-        category: 'groceries',
-        type: 'Expense',
-        Date: '22 March 2024',
-        amount: 'R 200',
-        edit: 'edit',
-      },
-    };
+  constructor(
+    private reportsService: ReportsService,
+    private router: Router,
+  ) {
+    this.init();
+  }
 
-    this.hotSettings.data = Object.values(data);
+  init() {
+    const data = this.reportsService.getReports();
+
+    this.hotSettings = {
+      data,
+      renderAllRows: true,
+      startRows: 5,
+      startCols: 5,
+      colHeaders: ['Title', 'Category', 'Type', 'Date', 'Amount'],
+      editor: false,
+      colWidths: 100,
+      rowHeights: 40,
+      stretchH: 'all',
+      width: '100%',
+      autoWrapRow: true,
+      autoWrapCol: true,
+      className: 'htCenter htMiddle',
+      licenseKey: 'non-commercial-and-evaluation',
+    };
+    console.log(this.hotSettings.data);
   }
 
   async navigateToHome() {
     await this.router.navigate(['/']);
+  }
+
+  async addReport() {
+    await this.router.navigate(['reports', 'add-edit-report']);
+  }
+
+  deleteReport() {
+    console.log('reported deleted');
   }
 }

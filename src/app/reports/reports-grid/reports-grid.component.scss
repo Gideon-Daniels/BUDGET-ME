@@ -1,0 +1,46 @@
+/* since below is more specific selectors than default handsontable styles it will take precedence without the need for
+ using !important */
+
+::ng-deep {
+  .handsontable {
+    font-family: Roboto, sans-serif;
+
+    th {
+      font-weight: bold;
+      background: none;
+      border: none;
+    }
+
+    th:first-child,
+    th:nth-child(2),
+    td:first-of-type {
+      border-left: none;
+    }
+
+    tr:first-child th,
+    tr:first-child td {
+      border-top: none;
+    }
+
+    td {
+      border: none;
+    }
+
+    th:first-child,
+    th:nth-child(2),
+    td:first-of-type {
+      border-left: none;
+    }
+
+    th:last-child {
+      /*Foundation framework fix*/
+      border: none;
+    }
+
+    .ht_clone_top th:nth-child(2) {
+      border-left-width: 0;
+      border-right: none;
+    }
+  }
+}
+

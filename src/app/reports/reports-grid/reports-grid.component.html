@@ -1,7 +1,13 @@
-<div>
+<div class="header">
   <button (click)="navigateToHome()">HOME</button>
 </div>
-<div>
+
+<div class="content">
+  <div class="controls">
+    <button (click)="addReport()">ADD</button>
+    <button (click)="deleteReport()">DELETE</button>
+  </div>
+
   <hot-table
     [settings]="hotSettings"
     [hotId]="id">
