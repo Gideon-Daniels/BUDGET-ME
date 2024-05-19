@@ -20,11 +20,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { HotTableModule } from '@handsontable/angular';
 import { ReportsGridComponent } from './reports/reports-grid/reports-grid.component';
-import { registerAllModules } from 'handsontable/registry';
-
-registerAllModules();
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,10 @@ registerAllModules();
     MatListModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    HotTableModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatCheckboxModule,
   ],
   providers: [
     // globally cause input errors to show when the input is dirty and invalid.
