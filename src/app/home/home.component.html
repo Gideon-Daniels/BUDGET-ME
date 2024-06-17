@@ -1,3 +1,12 @@
-<button (click)="navigateToAddEdit()"> ADD REPORT</button>
+<div class="btn-container">
+  <button class="btn" mat-button (click)="navigateToAddEdit()">
+    <mat-icon class="btnIcon">add</mat-icon>
+    <span class="btnText">ADD REPORTS</span>
+  </button>
 
-<button (click)="navigateToReports()"> REPORTS</button>
+  <button class="btn" mat-button (click)="navigateToReports()">
+    <mat-icon class="btnIcon">receipt</mat-icon>
+    <span class="btnText">REPORTS</span>
+  </button>
+</div>
+
