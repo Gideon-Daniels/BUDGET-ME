@@ -1,11 +1,22 @@
 <div class="header">
-  <button (click)="navigateToHome()">HOME</button>
+  <button class="navigate" mat-button (click)="navigateToHome()">
+    <mat-icon>keyboard_backspace</mat-icon>
+    <mat-label>
+      Back
+    </mat-label>
+  </button>
 </div>
 
 <div class="content">
-  <div class="controls">
-    <button (click)="addReport()">ADD</button>
-    <button (click)="deleteReport()">DELETE</button>
+  <div class="btn-group">
+    <button class="btn" color="accent" mat-button (click)="deleteReport()">
+      <mat-icon>delete</mat-icon>
+      <mat-label>DELETE</mat-label>
+    </button>
+    <button class="btn add-report" color="primary" mat-button (click)="addReport()">
+      <mat-icon>add</mat-icon>
+      <mat-label>ADD</mat-label>
+    </button>
   </div>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
@@ -60,7 +71,7 @@
     <ng-container matColumnDef="edit">
       <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-icon-button matTooltip="Click to Edit" class="iconbutton"
+        <button mat-icon-button matTooltip="Click to Edit" class="btn edit-button"
                 color="primary" (click)="edit()">
           <mat-icon>edit</mat-icon>
         </button>

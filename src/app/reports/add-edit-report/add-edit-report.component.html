@@ -47,14 +47,9 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <!--  <mat-form-field appearance="outline" class="example-form" floatLabel="always">-->
-    <!--    <mat-label>Description</mat-label>-->
-    <!--    <textarea matInput formControlName="description"></textarea>-->
-    <!--  </mat-form-field>-->
-
     <div class="btn-group">
       <button class="btn btn-submit" mat-flat-button type="submit">CREATE REPORT</button>
-      <button class="btn btn-cancel" mat-flat-button color="warn" type="button">CANCEL</button>
+      <button class="btn btn-cancel" mat-flat-button color="warn" type="button" (click)="back()">CANCEL</button>
     </div>
 
   </form>

@@ -1,5 +1,47 @@
-.mat-column-edit {
-  height: 56px;
+
+.header {
+  margin: 10px;
+
+  .navigate {
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  padding: 10px 50px;
+  gap: 15px;
+
+  .btn-group {
+    align-self: end;
+
+    .btn {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .add-report {
+      color: #287D3C !important
+    }
+  }
+
+  .demo-table {
+    .mat-column-edit {
+      height: 56px;
+    }
+
+    .edit-button {
+      font-size: 16px;
+      color: black !important
+    }
+  }
+
+
+}
+
 
 
