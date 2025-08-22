@@ -46,3 +46,7 @@ testem.log
 Thumbs.db
 
 /backend/demoFiles
+/backend/uploads
+/backend/package-lock.json
+package-lock.json
+

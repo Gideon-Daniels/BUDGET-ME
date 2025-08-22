@@ -14,14 +14,12 @@ export class Scribe {
 
   constructor(pdfFilePaths) {
     this.pdfFilePaths = pdfFilePaths;
-    this.init();
   }
 
   async init() {
     // Use Scribe.js to perform OCR on the PDF buffer
     await scribe.init({ pdf: true, ocr: true });
     await scribe.importFiles([this.pdfFilePaths]);
-    await this.start();
   }
 
   async start() {

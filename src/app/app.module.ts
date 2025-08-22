@@ -26,6 +26,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSortModule,
     MatCheckboxModule,
     MatTooltipModule,
+    HttpClientModule,
   ],
   providers: [
     // globally cause input errors to show when the input is dirty and invalid.
