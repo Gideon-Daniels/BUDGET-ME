@@ -2,46 +2,9 @@ import scribe from "scribe.js-ocr";
 import _ from "lodash";
 
 const dateRegex =
-  /\b(0[1-9]|[12][0-9]|3[01])\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/;
-const balanceRegex = /^\d+\s\d{3}\.\d{2}$/;
-//
-// const object = [ qa
-//   {
-//     metaData: {
-//       bankName: "Standard Bank",
-//       type: "transaction",
-//       contactInfo: { customerCare: "09090991", website: "www.mock." },
-//       published: "22 July 2023",
-//       accountHolder: "Gideon",
-//       account: "my moAccount",
-//       transactionDataRange: "21 April 2022 - 22 April 2023",
-//       availableBalance: "35472.50",
-//     },
-//     table: {
-//       headings: [
-//         "date",
-//         "description",
-//         "income",
-//         "expense",
-//         "bankCost",
-//         "balance",
-//       ],
-//       rows: [
-//         {
-//           date: "11 March",
-//           description: "purchase at pnp",
-//           income: null,
-//           expense: "-100.00",
-//           bankCost: null,
-//           balance: "1000.00",
-//           metadata: {
-//             category: 'food'
-//         }
-//         },
-//       ],
-//     },
-//   },
-// ];
+  /\b(0[1-9]|[12][0-9]|3[01])\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b(?!\s+\d{4}\b)/;
+
+const balanceRegex = /^(\d+\s\d{3}|\d+)\.\d{2}$/;
 
 export class Scribe {
   columnHeadings = [];
@@ -51,12 +14,14 @@ export class Scribe {
 
   constructor(pdfFilePaths) {
     this.pdfFilePaths = pdfFilePaths;
+    this.init();
   }
 
   async init() {
     // Use Scribe.js to perform OCR on the PDF buffer
     await scribe.init({ pdf: true, ocr: true });
     await scribe.importFiles([this.pdfFilePaths]);
+    await this.start();
   }
 
   async start() {
@@ -166,4 +131,4 @@ export class Scribe {
   }
 }
 
-// const instance = new Scribe("./demoFiles/demo.pdf");
+const instance = new Scribe("./demoFiles/demo.pdf");
