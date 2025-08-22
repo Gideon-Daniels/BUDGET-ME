@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ReportsService } from '../reports.service';
 import { Report } from '../report.model';
 import { SelectionModel } from '@angular/cdk/collections';
+import { PdfUploadService } from '../../pdf-upload-service.service';
 
 @Component({
   selector: 'app-reports-grid',
@@ -10,27 +11,30 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./reports-grid.component.scss'],
 })
 export class ReportsGridComponent {
-  displayedColumns: string[] = [
-    'select',
-    'title',
-    'category',
-    'type',
-    'date',
-    'amount',
-    'edit',
-  ];
+  displayedColumns: string[] = ['date', 'description', 'income', 'expense'];
   dataSource!: Report[];
   selection = new SelectionModel<Report>(true, []);
+  total = 0;
 
   constructor(
     private reportsService: ReportsService,
+    private pdfService: PdfUploadService,
     private router: Router,
   ) {
     this.init();
   }
 
   init() {
-    this.dataSource = this.reportsService.getReports();
+    // this.dataSource = this.reportsService.getReports();
+    const data = this.pdfService.pdfData;
+    console.log(data);
+    this.dataSource = data.rows;
+    data.rows.forEach((data: any) => {
+      console.log(data.expense);
+      if (!isNaN(parseFloat(data.income)))
+        this.total += parseFloat(data.income);
+    });
+    console.log(this.total);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

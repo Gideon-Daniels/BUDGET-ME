@@ -38,34 +38,59 @@
       </td>
     </ng-container>
 
-    <!-- Title Column -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef> Title</th>
-      <td mat-cell *matCellDef="let element"> {{ element.title }}</td>
-    </ng-container>
+    <!--    &lt;!&ndash; Title Column &ndash;&gt;-->
+    <!--    <ng-container matColumnDef="title">-->
+    <!--      <th mat-header-cell *matHeaderCellDef> Title</th>-->
+    <!--      <td mat-cell *matCellDef="let element"> {{ element.title }}</td>-->
+    <!--    </ng-container>-->
 
-    <!-- Category Column -->
-    <ng-container matColumnDef="category">
-      <th mat-header-cell *matHeaderCellDef> Category</th>
-      <td mat-cell *matCellDef="let element"> {{ element.category }}</td>
-    </ng-container>
+    <!--    &lt;!&ndash; Category Column &ndash;&gt;-->
+    <!--    <ng-container matColumnDef="category">-->
+    <!--      <th mat-header-cell *matHeaderCellDef> Category</th>-->
+    <!--      <td mat-cell *matCellDef="let element"> {{ element.category }}</td>-->
+    <!--    </ng-container>-->
 
-    <!-- Type Column -->
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef> Type</th>
-      <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
-    </ng-container>
+    <!--    &lt;!&ndash; Type Column &ndash;&gt;-->
+    <!--    <ng-container matColumnDef="type">-->
+    <!--      <th mat-header-cell *matHeaderCellDef> Type</th>-->
+    <!--      <td mat-cell *matCellDef="let element"> {{ element.type }}</td>-->
+    <!--    </ng-container>-->
 
     <!-- Date Column -->
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef> Date</th>
       <td mat-cell *matCellDef="let element"> {{ element.date }}</td>
     </ng-container>
-    <!--  Amount column  -->
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef> Amount</th>
-      <td mat-cell *matCellDef="let element"> {{ element.amount }}</td>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> description</th>
+      <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
     </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="income">
+      <th mat-header-cell *matHeaderCellDef> income</th>
+      <td mat-cell *matCellDef="let element"> {{ element.income }}</td>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="expense">
+      <th mat-header-cell *matHeaderCellDef> expense</th>
+      <td mat-cell *matCellDef="let element"> {{ element.expense }}</td>
+    </ng-container>
+
+    <!--    &lt;!&ndash; Date Column &ndash;&gt;-->
+    <!--    <ng-container matColumnDef="balance" >-->
+    <!--      <th mat-header-cell *matHeaderCellDef> balance</th>-->
+    <!--      <td mat-cell *matCellDef="let element"> {{ element.balance }}</td>-->
+    <!--    </ng-container>-->
+
+    <!--    &lt;!&ndash;  Amount column  &ndash;&gt;-->
+    <!--    <ng-container matColumnDef="amount">-->
+    <!--      <th mat-header-cell *matHeaderCellDef> Amount</th>-->
+    <!--      <td mat-cell *matCellDef="let element"> {{ element.amount }}</td>-->
+    <!--    </ng-container>-->
 
     <!-- Action Column -->
     <ng-container matColumnDef="edit">
