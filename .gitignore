@@ -50,3 +50,5 @@ Thumbs.db
 /backend/package-lock.json
 package-lock.json
 
+/backend/eng.traineddata
+/backend/dist/
