@@ -1,5 +1,5 @@
 import express from 'express';
-import { dbConnection } from './db.ts';
+import { dbConnection } from './database/db.ts';
 
 const app = express();
 const db = await dbConnection();
