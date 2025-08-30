@@ -1,11 +1,16 @@
 import express from 'express';
+import { dbConnection } from './db.ts';
 
 const app = express();
+const db = await dbConnection();
 
-app.get('/', (req, res) => {
-  console.log(req.method);
-  console.log('hello');
-  res.json({ message: 'hello' });
+app.get('/db/status', async (_, res) => {
+  if (db instanceof Error) {
+    res.json({ message: 'offline' });
+    return;
+  }
+
+  res.json({ message: 'online' });
 });
 
-app.listen(300);
+app.listen(3000);
