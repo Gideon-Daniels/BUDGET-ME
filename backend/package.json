@@ -18,7 +18,7 @@
     "express": "^5.1.0",
     "lodash": "^4.17.21",
     "multer": "2.0.2",
-    "mysql2": "^3.14.1",
+    "mysql2": "^3.14.3",
     "pdf-parse": "^1.1.1",
     "pdf2json": "^3.1.5",
     "pdf2table": "^0.0.2",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.18.0",
     "nodemon": "^3.1.10",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
