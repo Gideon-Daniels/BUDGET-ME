@@ -28,13 +28,12 @@ export class DatabaseService {
     const sql =
       'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
 
-    const query = await this.dbConnection.execute(sql, [
+    await this.dbConnection.execute(sql, [
       data.amount,
       data.type,
       data.category,
       data.date,
       data.description,
     ]);
-    console.log(query);
   }
 }
