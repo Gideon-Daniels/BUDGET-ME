@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS transaction_statement
+CREATE TABLE IF NOT EXISTS transaction_statements
 (
   id          INT AUTO_INCREMENT PRIMARY KEY,
   income      DECIMAL(10, 2) NOT NULL,
