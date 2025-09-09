@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import mysql, { QueryResult } from 'mysql2/promise';
 import { Report } from '../models/Reports.ts';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
@@ -46,42 +46,37 @@ export class DatabaseService {
     }
   }
 
-  async getReport(data: Report) {
-    const sql =
-      'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
+  async fetchRowFromTable(
+    tableName: TableName,
+    id: string,
+  ): Promise<QueryResult | undefined> {
+    const sql = `SELECT * FROM ${tableName} WHERE id=${id} `;
 
-    await this.dbConnection.execute(sql, [
-      data.amount,
-      data.type,
-      data.category,
-      data.date,
-      data.description,
-    ]);
+    try {
+      const result = await this.dbConnection.query(sql);
+
+      if (result[0] instanceof Array && !result[0].length) return;
+      return result[0];
+    } catch (e) {
+      console.log(e);
+      return;
+    }
   }
-
-  async updateReport(data: Report) {
-    const sql =
-      'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
-
-    await this.dbConnection.execute(sql, [
-      data.amount,
-      data.type,
-      data.category,
-      data.date,
-      data.description,
-    ]);
+  async deleteRowFromTable(tableName: TableName, id: string) {
+    const sql = `DELETE FROM ${tableName} WHERE id=${id} `;
+    const res = await this.dbConnection.query(sql);
+    console.log(res);
   }
-
-  async deleteReport(data: Report) {
-    const sql =
-      'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
-
-    await this.dbConnection.execute(sql, [
-      data.amount,
-      data.type,
-      data.category,
-      data.date,
-      data.description,
-    ]);
-  }
+  // async updateReport(data: Report) {
+  //   const sql =
+  //     'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
+  //
+  //   await this.dbConnection.execute(sql, [
+  //     data.amount,
+  //     data.type,
+  //     data.category,
+  //     data.date,
+  //     data.description,
+  //   ]);
+  // }
 }
