@@ -20,19 +20,16 @@ export class DatabaseService {
     });
   }
 
-  async addDataToTable(
-    tableName: TableName,
-    data: Report | Transaction_statements,
-  ) {
+  async addEntry(tableName: TableName, data: Report | Transaction_statements) {
     // if (this.dbConnection instanceof Error) throw this.dbConnection;
     const columns = Object.keys(data).toString();
     const values = Object.values(data);
-    const statements = values.map(() => '?');
-    const sql = `INSERT INTO ${tableName}(${columns}) VALUES (${statements})`;
+    const placeholders = values.map(() => '?');
+    const sql = `INSERT INTO ${tableName}(${columns}) VALUES (${placeholders})`;
     await this.dbConnection.execute(sql, values);
   }
 
-  async fetchDataFromTable(
+  async fetchAllEntries(
     tableName: TableName,
   ): Promise<mysql.QueryResult | undefined> {
     const sql = `SELECT * FROM ${tableName}`;
@@ -46,14 +43,28 @@ export class DatabaseService {
     }
   }
 
-  async fetchRowFromTable(
+  async deleteMultipleEntries(
     tableName: TableName,
-    id: string,
-  ): Promise<QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName} WHERE id=${id} `;
+  ): Promise<mysql.QueryResult | undefined> {
+    const sql = `SELECT * FROM ${tableName}`;
 
     try {
       const result = await this.dbConnection.query(sql);
+      return result[0];
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+  }
+
+  async FetchEntry(
+    tableName: TableName,
+    id: string,
+  ): Promise<QueryResult | undefined> {
+    const sql = `SELECT * FROM ${tableName} WHERE id=?`;
+
+    try {
+      const result = await this.dbConnection.execute(sql, [id]);
 
       if (result[0] instanceof Array && !result[0].length) return;
       return result[0];
@@ -62,21 +73,26 @@ export class DatabaseService {
       return;
     }
   }
-  async deleteRowFromTable(tableName: TableName, id: string) {
-    const sql = `DELETE FROM ${tableName} WHERE id=${id} `;
-    const res = await this.dbConnection.query(sql);
+  async deleteEntry(tableName: TableName, id: string) {
+    const sql = `DELETE FROM ${tableName} WHERE id=?`;
+    const res = await this.dbConnection.execute(sql, [id]);
     console.log(res);
   }
-  // async updateReport(data: Report) {
-  //   const sql =
-  //     'INSERT INTO `reports`(`amount`,`type`,`category`,`date`,`description`) VALUES (?,?,?,?,?)';
-  //
-  //   await this.dbConnection.execute(sql, [
-  //     data.amount,
-  //     data.type,
-  //     data.category,
-  //     data.date,
-  //     data.description,
-  //   ]);
-  // }
+
+  async updateEntry(
+    tableName: TableName,
+    id: string,
+    data: Report | Transaction_statements,
+  ) {
+    const query = Object.keys(data)
+      .map((key: string): string => {
+        // @ts-ignore
+        return `${key} = '${data[key]}'`;
+      })
+      .toString();
+    console.log(query);
+    const sql = `UPDATE ${tableName} SET ${query} WHERE id=?  LIMIT 1`;
+    const res = await this.dbConnection.execute(sql, [id]);
+    console.log(res);
+  }
 }
