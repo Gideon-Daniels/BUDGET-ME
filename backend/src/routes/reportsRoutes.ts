@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   addReport,
+  deleteMultipleReports,
   deleteReport,
   getAllReports,
   getReport,
@@ -9,7 +10,11 @@ import {
 
 export const reportsRouter = express.Router();
 
-reportsRouter.route('/').get(getAllReports).post(addReport);
+reportsRouter
+  .route('/')
+  .get(getAllReports)
+  .post(addReport)
+  .delete(deleteMultipleReports);
 reportsRouter
   .route('/:id')
   .get(getReport)

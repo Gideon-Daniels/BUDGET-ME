@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   addTransactionStatement,
+  deleteMultipleTransactionStatements,
   deleteTransactionStatement,
   getAllTransactionStatements,
   getTransactionStatement,
@@ -12,7 +13,8 @@ export const transactionStatementRouter = express.Router();
 transactionStatementRouter
   .route('/')
   .get(getAllTransactionStatements)
-  .post(addTransactionStatement);
+  .post(addTransactionStatement)
+  .delete(deleteMultipleTransactionStatements);
 
 transactionStatementRouter
   .route('/:id')

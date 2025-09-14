@@ -40,6 +40,20 @@ export async function deleteTransactionStatement(req: Request, res: Response) {
   }
 }
 
+export async function deleteMultipleTransactionStatements(
+  req: Request,
+  res: Response,
+) {
+  try {
+    await db.deleteMultipleEntries('transaction_statements', req.body['ids']);
+    res.status(200).json({ message: 'successful' });
+  } catch (e: any) {
+    res
+      .status(500)
+      .json({ message: `failed to delete entry in database ${e.message}` });
+  }
+}
+
 export async function updateTransactionStatement(req: Request, res: Response) {
   res.status(200).json({ message: 'successful' });
 }

@@ -35,8 +35,8 @@ export class DatabaseService {
     const sql = `SELECT * FROM ${tableName}`;
 
     try {
-      const result = await this.dbConnection.query(sql);
-      return result[0];
+      const [result] = await this.dbConnection.query(sql);
+      return result;
     } catch (e) {
       console.log(e);
       return;
@@ -45,12 +45,14 @@ export class DatabaseService {
 
   async deleteMultipleEntries(
     tableName: TableName,
+    ids: number[],
   ): Promise<mysql.QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName}`;
+    const placeholders = ids.map(() => '?').join(', ');
 
     try {
-      const result = await this.dbConnection.query(sql);
-      return result[0];
+      const sql = `DELETE FROM ${tableName} WHERE id IN (${placeholders})`;
+      const [result] = await this.dbConnection.execute(sql, ids);
+      return result;
     } catch (e) {
       console.log(e);
       return;
@@ -90,9 +92,7 @@ export class DatabaseService {
         return `${key} = '${data[key]}'`;
       })
       .toString();
-    console.log(query);
     const sql = `UPDATE ${tableName} SET ${query} WHERE id=?  LIMIT 1`;
-    const res = await this.dbConnection.execute(sql, [id]);
-    console.log(res);
+    await this.dbConnection.execute(sql, [id]);
   }
 }
