@@ -21,7 +21,7 @@ export class DatabaseService {
   }
 
   async addEntry(tableName: TableName, data: Report | Transaction_statements) {
-    // if (this.dbConnection instanceof Error) throw this.dbConnection;
+    if (!data) throw new Error('invalid data was received');
     const columns = Object.keys(data).toString();
     const values = Object.values(data);
     const placeholders = values.map(() => '?');
@@ -47,6 +47,7 @@ export class DatabaseService {
     tableName: TableName,
     ids: number[],
   ): Promise<mysql.QueryResult | undefined> {
+    if (!ids) throw new Error('invalid data was received');
     const placeholders = ids.map(() => '?').join(', ');
 
     try {
@@ -75,10 +76,10 @@ export class DatabaseService {
       return;
     }
   }
+
   async deleteEntry(tableName: TableName, id: string) {
     const sql = `DELETE FROM ${tableName} WHERE id=?`;
-    const res = await this.dbConnection.execute(sql, [id]);
-    console.log(res);
+    await this.dbConnection.execute(sql, [id]);
   }
 
   async updateEntry(
@@ -86,6 +87,7 @@ export class DatabaseService {
     id: string,
     data: Report | Transaction_statements,
   ) {
+    if (!data) throw new Error('invalid data ');
     const query = Object.keys(data)
       .map((key: string): string => {
         // @ts-ignore
@@ -94,5 +96,23 @@ export class DatabaseService {
       .toString();
     const sql = `UPDATE ${tableName} SET ${query} WHERE id=?  LIMIT 1`;
     await this.dbConnection.execute(sql, [id]);
+  }
+
+  async aggregateMonthlyReports() {
+    const query = `SELECT
+                     DATE_FORMAT(date, '%Y-%m') AS month,
+                        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS totalIncome,
+                        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalExpense,
+                        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
+                        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalBalance
+                   FROM reports
+                   GROUP BY month`;
+
+    try {
+      const [result] = await this.dbConnection.query(query);
+      return result;
+    } catch (e) {
+      return;
+    }
   }
 }
