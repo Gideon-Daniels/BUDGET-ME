@@ -26,9 +26,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-add-edit-report',
-  templateUrl: './add-edit-report.component.html',
-  styleUrls: ['./add-edit-report.component.scss'],
+    selector: 'app-add-edit-report',
+    templateUrl: './add-edit-report.component.html',
+    styleUrls: ['./add-edit-report.component.scss'],
+    standalone: false
 })
 export class AddEditReportComponent implements OnInit {
   inEditMode: boolean = false;

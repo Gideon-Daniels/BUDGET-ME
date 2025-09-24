@@ -6,9 +6,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { PdfUploadService } from '../../pdf-upload-service.service';
 
 @Component({
-  selector: 'app-reports-grid',
-  templateUrl: './reports-grid.component.html',
-  styleUrls: ['./reports-grid.component.scss'],
+    selector: 'app-reports-grid',
+    templateUrl: './reports-grid.component.html',
+    styleUrls: ['./reports-grid.component.scss'],
+    standalone: false
 })
 export class ReportsGridComponent {
   displayedColumns: string[] = ['date', 'description', 'income', 'expense'];
