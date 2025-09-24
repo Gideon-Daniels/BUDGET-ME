@@ -26,41 +26,35 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    ReportsComponent,
-    AddEditReportComponent,
-    ReportsGridComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatSlideToggleModule,
-    MatInputModule,
-    BrowserAnimationsModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    HttpClientModule,
-  ],
-  providers: [
-    // globally cause input errors to show when the input is dirty and invalid.
-    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        ReportsComponent,
+        AddEditReportComponent,
+        ReportsGridComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatSlideToggleModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatCheckboxModule,
+        MatTooltipModule], providers: [
+        // globally cause input errors to show when the input is dirty and invalid.
+        { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
