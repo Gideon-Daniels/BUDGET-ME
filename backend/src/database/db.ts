@@ -98,15 +98,24 @@ export class DatabaseService {
     await this.dbConnection.execute(sql, [id]);
   }
 
-  async aggregateMonthlyReports() {
-    const query = `SELECT
-                     DATE_FORMAT(date, '%Y-%m') AS month,
-                        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS totalIncome,
-                        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalExpense,
-                        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
-                        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalBalance
-                   FROM reports
-                   GROUP BY month`;
+  async aggregateReports() {
+    const query = `
+      SELECT
+        CASE
+          WHEN GROUPING(YEAR(date)) = 0 AND GROUPING(MONTH(date)) = 0 THEN 'monthly'
+          WHEN GROUPING(YEAR(date)) = 0 AND GROUPING(MONTH(date)) = 1 THEN 'yearly'
+          WHEN GROUPING(YEAR(date)) = 1 AND GROUPING(MONTH(date)) = 1 THEN 'overall'
+          END AS summaryType,
+        YEAR(date) AS year,
+        MONTH(date) AS month,
+        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS totalIncome,
+        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalExpense,
+        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
+        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalBalance
+      FROM reports
+      GROUP BY YEAR(date), MONTH(date) WITH ROLLUP
+      ORDER BY year, month;
+    `;
 
     try {
       const [result] = await this.dbConnection.query(query);
