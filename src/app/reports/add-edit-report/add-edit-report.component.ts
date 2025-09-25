@@ -4,11 +4,16 @@ import {
   FormGroup,
   FormGroupDirective,
   NgForm,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, MatOption } from '@angular/material/core';
 import { Report } from '../report.model';
 import { ReportsService } from '../reports.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -26,10 +31,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-    selector: 'app-add-edit-report',
-    templateUrl: './add-edit-report.component.html',
-    styleUrls: ['./add-edit-report.component.scss'],
-    standalone: false
+  selector: 'app-add-edit-report',
+  templateUrl: './add-edit-report.component.html',
+  styleUrls: ['./add-edit-report.component.scss'],
+  standalone: true,
+  imports: [
+    MatIcon,
+    MatLabel,
+    ReactiveFormsModule,
+    MatFormField,
+    MatSelect,
+    MatDatepickerToggle,
+    MatDatepicker,
+    MatInput,
+    MatDatepickerInput,
+    MatOption,
+  ],
 })
 export class AddEditReportComponent implements OnInit {
   inEditMode: boolean = false;

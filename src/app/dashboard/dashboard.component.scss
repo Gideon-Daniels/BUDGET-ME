@@ -1,0 +1,10 @@
+#dashboard-container {
+  display: grid;
+  grid-template-columns: 20% 1fr 20%;
+  height: 100vh;
+}
+
+.section-container {
+  display: flex;
+  justify-content: center;
+}

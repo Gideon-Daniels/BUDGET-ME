@@ -1,0 +1,19 @@
+<div id="dashboard-container">
+  <div>
+  </div>
+  <div class="section-container">
+    <div *ngIf="!mockSection; else showMockData" class="section-container">
+      <app-summary-card *ngFor="let section of placeHolderSections" [title]="section"></app-summary-card>
+    </div>
+    <ng-template #showMockData>
+      <app-summary-card *ngFor="let section of mockSection" [title]="section.title"
+                        [amount]="section.amount"></app-summary-card>
+
+    </ng-template>
+  </div>
+  <div>
+  </div>
+</div>
+
+
+
