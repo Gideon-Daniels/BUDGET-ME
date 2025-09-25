@@ -5,7 +5,7 @@ import {
   MatCardHeader,
   MatCardTitle,
 } from '@angular/material/card';
-import { NgIf, UpperCasePipe } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
