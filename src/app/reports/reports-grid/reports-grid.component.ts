@@ -4,11 +4,17 @@ import { ReportsService } from '../reports.service';
 import { Report } from '../report.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PdfUploadService } from '../../pdf-upload-service.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatLabel } from '@angular/material/input';
+import { MatCell, MatHeaderCell, MatTable } from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-reports-grid',
   templateUrl: './reports-grid.component.html',
   styleUrls: ['./reports-grid.component.scss'],
+  standalone: true,
+  imports: [MatIcon, MatLabel, MatTable, MatCheckbox, MatHeaderCell, MatCell],
 })
 export class ReportsGridComponent {
   displayedColumns: string[] = ['date', 'description', 'income', 'expense'];

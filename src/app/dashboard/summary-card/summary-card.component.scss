@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.loader {
+  width: 55px !important;
+  height: 55px !important;
+  left: 100px !important;
+
+  ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
+    stroke: black !important;
+  }
+}
+
+.total-type-card {
+  position: relative;
+  width: 254px;
+  height: 120px;
+  gap: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  border-width: 3px;
+  border-color: #000;
+}
+
+.total-header {
+  padding: 0 10px;
+}
+
+.total-title {
+  font-size: 16px;
+}
+
+.total-amount {
+  font-size: 32px;
+  text-align: center;
+}
