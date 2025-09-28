@@ -7,3 +7,8 @@ export interface Report {
   description?: string;
   // created_at: Date;
 }
+export interface ReportSummary {
+  totalIncome: string;
+  totalExpense: string;
+  totalBalance: string;
+}

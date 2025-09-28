@@ -1,8 +1,17 @@
-import mysql, { QueryResult } from 'mysql2/promise';
+import mysql, { QueryResult, RowDataPacket } from 'mysql2/promise';
 import { Report } from '../models/Reports.ts';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
 type TableName = 'transaction_statements' | 'reports';
+interface SummaryData {
+  income: number;
+  expense: number;
+  balance: number;
+}
+
+interface Summary {
+  [period: string]: SummaryData;
+}
 
 export class DatabaseService {
   dbConnection!: mysql.Connection;
@@ -25,14 +34,16 @@ export class DatabaseService {
     const columns = Object.keys(data).toString();
     const values = Object.values(data);
     const placeholders = values.map(() => '?');
-    const sql = `INSERT INTO ${tableName}(${columns}) VALUES (${placeholders})`;
+    const sql = `INSERT INTO ${tableName}(${columns})
+                 VALUES (${placeholders})`;
     await this.dbConnection.execute(sql, values);
   }
 
   async fetchAllEntries(
     tableName: TableName,
   ): Promise<mysql.QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName}`;
+    const sql = `SELECT *
+                 FROM ${tableName}`;
 
     try {
       const [result] = await this.dbConnection.query(sql);
@@ -51,7 +62,9 @@ export class DatabaseService {
     const placeholders = ids.map(() => '?').join(', ');
 
     try {
-      const sql = `DELETE FROM ${tableName} WHERE id IN (${placeholders})`;
+      const sql = `DELETE
+                   FROM ${tableName}
+                   WHERE id IN (${placeholders})`;
       const [result] = await this.dbConnection.execute(sql, ids);
       return result;
     } catch (e) {
@@ -64,7 +77,9 @@ export class DatabaseService {
     tableName: TableName,
     id: string,
   ): Promise<QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName} WHERE id=?`;
+    const sql = `SELECT *
+                 FROM ${tableName}
+                 WHERE id = ?`;
 
     try {
       const result = await this.dbConnection.execute(sql, [id]);
@@ -78,7 +93,9 @@ export class DatabaseService {
   }
 
   async deleteEntry(tableName: TableName, id: string) {
-    const sql = `DELETE FROM ${tableName} WHERE id=?`;
+    const sql = `DELETE
+                 FROM ${tableName}
+                 WHERE id = ?`;
     await this.dbConnection.execute(sql, [id]);
   }
 
@@ -94,32 +111,44 @@ export class DatabaseService {
         return `${key} = '${data[key]}'`;
       })
       .toString();
-    const sql = `UPDATE ${tableName} SET ${query} WHERE id=?  LIMIT 1`;
+    const sql = `UPDATE ${tableName}
+                 SET ${query}
+                 WHERE id = ?
+                 LIMIT 1`;
     await this.dbConnection.execute(sql, [id]);
   }
 
   async aggregateReports() {
     const query = `
-      SELECT
-        CASE
-          WHEN GROUPING(YEAR(date)) = 0 AND GROUPING(MONTH(date)) = 0 THEN 'monthly'
-          WHEN GROUPING(YEAR(date)) = 0 AND GROUPING(MONTH(date)) = 1 THEN 'yearly'
-          WHEN GROUPING(YEAR(date)) = 1 AND GROUPING(MONTH(date)) = 1 THEN 'overall'
-          END AS summaryType,
-        YEAR(date) AS year,
-        MONTH(date) AS month,
-        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS totalIncome,
-        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalExpense,
-        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
-        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS totalBalance
-      FROM reports
-      GROUP BY YEAR(date), MONTH(date) WITH ROLLUP
+      SELECT CASE
+               WHEN GROUPING(year) = 0 AND GROUPING(month) = 0 THEN CONCAT(year, '-', LPAD(month, 2, '0'))
+               WHEN GROUPING(year) = 0 AND GROUPING(month) = 1 THEN CAST(year AS CHAR)
+               WHEN GROUPING(year) = 1 AND GROUPING(month) = 1 THEN 'overall'
+               END                                                      AS period,
+             SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END)      AS Income,
+             SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END)     AS Expense,
+             SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END)
+               - SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS Balance
+      FROM (
+             -- precompute grouping keys so outer query doesn't touch raw DATE column
+             SELECT YEAR(date) AS year, MONTH(date) AS month, type, amount
+             FROM reports) AS x
+      GROUP BY year, month
+      WITH ROLLUP
       ORDER BY year, month;
     `;
 
     try {
-      const [result] = await this.dbConnection.query(query);
-      return result;
+      const [result] = await this.dbConnection.query<RowDataPacket[]>(query);
+      return result.map((item): Summary => {
+        return {
+          [item.period]: {
+            income: item.Income,
+            expense: item.Expense,
+            balance: item.Balance,
+          },
+        };
+      });
     } catch (e) {
       return;
     }

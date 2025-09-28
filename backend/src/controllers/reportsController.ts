@@ -62,3 +62,12 @@ export async function updateReport(req: Request, res: Response) {
       .json({ message: `failed to update entry in database: ${e.message}` });
   }
 }
+
+export async function getReportsSummary(req: Request, res: Response) {
+  const data = await db.aggregateReports();
+
+  if (!data)
+    res.status(500).json({ message: 'failed to fetch data from database' });
+
+  res.status(200).json(data);
+}
