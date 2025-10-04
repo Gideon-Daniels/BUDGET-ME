@@ -3,15 +3,6 @@ import { Report } from '../models/Reports.ts';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
 type TableName = 'transaction_statements' | 'reports';
-interface SummaryData {
-  income: number;
-  expense: number;
-  balance: number;
-}
-
-interface Summary {
-  [period: string]: SummaryData;
-}
 
 export class DatabaseService {
   dbConnection!: mysql.Connection;
@@ -42,8 +33,7 @@ export class DatabaseService {
   async fetchAllEntries(
     tableName: TableName,
   ): Promise<mysql.QueryResult | undefined> {
-    const sql = `SELECT *
-                 FROM ${tableName}`;
+    const sql = `SELECT * FROM ${tableName}`;
 
     try {
       const [result] = await this.dbConnection.query(sql);
@@ -137,18 +127,19 @@ export class DatabaseService {
       WITH ROLLUP
       ORDER BY year, month;
     `;
-
+    const res = {};
     try {
       const [result] = await this.dbConnection.query<RowDataPacket[]>(query);
-      return result.map((item): Summary => {
-        return {
+      result.forEach((item) => {
+        Object.assign(res, {
           [item.period]: {
             income: item.Income,
             expense: item.Expense,
             balance: item.Balance,
           },
-        };
+        });
       });
+      return res;
     } catch (e) {
       return;
     }

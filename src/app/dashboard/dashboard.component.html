@@ -16,14 +16,15 @@
       Summary : {{ selectedPeriod }}
     </h3>
     <div class="section-container">
-      @if (dashboardSections.length === 0) {
+      @if (!dashboardSections || dashboardSections.length === 0) {
         <mat-spinner class="loader"></mat-spinner>
       } @else {
-        <app-summary-card
-          *ngFor="let section of dashboardSections"
-          [title]="section.displayName"
-          [amount]="section.amount"
-        ></app-summary-card>
+        @for (section of dashboardSections; track section) {
+          <app-summary-card
+            [title]="section.displayName"
+            [amount]="section.amount"
+          ></app-summary-card>
+        }
       }
     </div>
     <div class="table">table</div>
