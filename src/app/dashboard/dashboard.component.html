@@ -1,6 +1,5 @@
 <div id="dashboard-container">
   <div class="left"></div>
-  
   <div class="middle">
     <h3>Select Summary</h3>
     <div class="dropdown">
@@ -17,18 +16,18 @@
       Summary : {{ selectedPeriod }}
     </h3>
     <div class="section-container">
-      <mat-spinner class="loader" *ngIf="dashboardSections.length === 0; else elseBlock"></mat-spinner>
-      <ng-template #elseBlock>
+      @if (dashboardSections.length === 0) {
+        <mat-spinner class="loader"></mat-spinner>
+      } @else {
         <app-summary-card
           *ngFor="let section of dashboardSections"
           [title]="section.displayName"
           [amount]="section.amount"
         ></app-summary-card>
-      </ng-template>
+      }
     </div>
     <div class="table">table</div>
   </div>
-
   <div class="right">
   </div>
 </div>

@@ -5,19 +5,10 @@ import {
   MatCardHeader,
   MatCardTitle,
 } from '@angular/material/card';
-import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-summary-card',
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    MatCardTitle,
-    MatProgressSpinner,
-    NgIf,
-  ],
+  imports: [MatCard, MatCardHeader, MatCardContent, MatCardTitle],
   templateUrl: './summary-card.component.html',
   styleUrl: './summary-card.component.scss',
   standalone: true,

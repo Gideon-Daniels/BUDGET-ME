@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SummaryCardComponent } from './summary-card/summary-card.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { ApiService } from '../api.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatFormField, MatLabel } from '@angular/material/input';
@@ -13,7 +13,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   imports: [
     SummaryCardComponent,
     NgForOf,
-    NgIf,
     MatProgressSpinner,
     MatFormField,
     MatLabel,
