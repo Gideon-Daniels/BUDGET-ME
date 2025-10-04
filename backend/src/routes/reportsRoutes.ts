@@ -5,6 +5,7 @@ import {
   deleteReport,
   getAllReports,
   getReport,
+  getReportsSummary,
   updateReport,
 } from '../controllers/reportsController.js';
 
@@ -15,6 +16,7 @@ reportsRouter
   .get(getAllReports)
   .post(addReport)
   .delete(deleteMultipleReports);
+reportsRouter.route('/summary').get(getReportsSummary);
 reportsRouter
   .route('/:id')
   .get(getReport)

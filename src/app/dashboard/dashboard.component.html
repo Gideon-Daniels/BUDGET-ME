@@ -1,17 +1,34 @@
 <div id="dashboard-container">
-  <div>
-  </div>
-  <div class="section-container">
-    <div *ngIf="!mockSection; else showMockData" class="section-container">
-      <app-summary-card *ngFor="let section of placeHolderSections" [title]="section"></app-summary-card>
+  <div class="left"></div>
+  <div class="middle">
+    <h3>Select Summary</h3>
+    <div class="dropdown">
+      <mat-form-field>
+        <mat-label>Select Period</mat-label>
+        <mat-select [(value)]="selectedPeriod" [formControl]="filterControl">
+          @for (option of periodValues; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
-    <ng-template #showMockData>
-      <app-summary-card *ngFor="let section of mockSection" [title]="section.title"
-                        [amount]="section.amount"></app-summary-card>
-
-    </ng-template>
+    <h3>
+      Summary : {{ selectedPeriod }}
+    </h3>
+    <div class="section-container">
+      @if (dashboardSections.length === 0) {
+        <mat-spinner class="loader"></mat-spinner>
+      } @else {
+        <app-summary-card
+          *ngFor="let section of dashboardSections"
+          [title]="section.displayName"
+          [amount]="section.amount"
+        ></app-summary-card>
+      }
+    </div>
+    <div class="table">table</div>
   </div>
-  <div>
+  <div class="right">
   </div>
 </div>
 
