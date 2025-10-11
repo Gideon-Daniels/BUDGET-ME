@@ -18,6 +18,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { NgForOf } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { MatButton } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -66,6 +67,7 @@ export class AddEditReportComponent implements OnInit {
   types: string[] = ['Expense', 'Income'];
   categories: string[] = ['Salary', 'Home', 'Groceries'];
   readonly dialogRef = inject(MatDialogRef<AddEditReportComponent>);
+  private _snackbar = inject(MatSnackBar);
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -94,5 +96,11 @@ export class AddEditReportComponent implements OnInit {
     // format date
     this.addEditForm.value.date = new Date(date).toISOString().slice(0, 10);
     this.apiService.addReport(this.addEditForm.value);
+    this._snackbar.open('REPORT SUCCESSFULLY CREATED', undefined, {
+      duration: 5000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+    });
+    this.addEditForm.reset();
   }
 }
