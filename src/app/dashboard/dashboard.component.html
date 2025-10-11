@@ -1,9 +1,15 @@
 <div id="dashboard-container">
-  <div class="left"></div>
+  <div class="left">
+    <button class="btn btn-primary" mat-flat-button (click)="openReportDialog()">
+      <mat-icon class="btnIcon">add</mat-icon>
+      
+      add report
+    </button>
+  </div>
   <div class="middle">
     <h3>Select Summary</h3>
     <div class="dropdown">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Select Period</mat-label>
         <mat-select [(value)]="selectedPeriod" [formControl]="filterControl">
           @for (option of periodValues; track option) {

@@ -9,3 +9,17 @@ html, body {
   height: 100%;
   font-family: Roboto, sans-serif;
 }
+
+
+.btn-primary {
+  background-color: black !important;
+  color: white !important;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: white !important;
+  color: black !important;
+  border: none;
+  cursor: pointer;
+}

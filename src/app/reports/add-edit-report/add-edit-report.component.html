@@ -1,20 +1,11 @@
 <div class="container">
-  <button class="navigate" mat-button (click)="back()">
-    <mat-icon>keyboard_backspace</mat-icon>
+  <div class="header">
     <mat-label>
-      Back
+      Add Report
     </mat-label>
-  </button>
-
-
+  </div>
   <form [formGroup]="addEditForm" class="form-container" (ngSubmit)="onSubmit()">
-    <div class="header">
-      <mat-label>
-        REPORT
-      </mat-label>
-    </div>
-
-    <mat-form-field appearance="outline" class="example-form" floatLabel="always">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Title <span class="important">*</span></mat-label>
       <input matInput placeholder="Name of your report" formControlName="title">
     </mat-form-field>
@@ -47,8 +38,13 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
+    <mat-form-field appearance="outline" floatLabel="always" class="example-form">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Add decription">></textarea>
+    </mat-form-field>
+
     <div class="btn-group">
-      <button class="btn btn-submit" mat-flat-button type="submit">CREATE REPORT</button>
+      <button class="btn btn-primary" mat-flat-button type="submit">CREATE REPORT</button>
       <button class="btn btn-cancel" mat-flat-button color="warn" type="button" (click)="back()">CANCEL</button>
     </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SummaryCardComponent } from './summary-card/summary-card.component';
 import { ApiService } from '../api.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -7,6 +7,10 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SummaryReport } from '../../../backend/src/models/Reports';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditReportComponent } from '../reports/add-edit-report/add-edit-report.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +22,8 @@ import { SummaryReport } from '../../../backend/src/models/Reports';
     MatOption,
     MatSelect,
     ReactiveFormsModule,
+    MatButton,
+    MatIcon,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -29,6 +35,7 @@ export class DashboardComponent implements OnInit {
   dashboardSections!: { displayName: string; amount: string }[];
   reportSummary!: SummaryReport;
   filterControl = new FormControl('overall');
+  readonly dialog = inject(MatDialog);
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {
@@ -51,6 +58,14 @@ export class DashboardComponent implements OnInit {
         displayName: key.charAt(0).toUpperCase() + key.slice(1),
         amount: selectSummary[key],
       };
+    });
+  }
+
+  openReportDialog() {
+    const dialogRef = this.dialog.open(AddEditReportComponent);
+
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('dialog was closed');
     });
   }
 }
