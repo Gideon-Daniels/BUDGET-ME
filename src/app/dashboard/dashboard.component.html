@@ -11,8 +11,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Select Period</mat-label>
         <mat-select [(value)]="selectedPeriod" [formControl]="filterControl">
-          @for (option of periodValues; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
+          @for (periodValue of periodValues; track periodValue) {
+            <mat-option [value]="periodValue">{{ periodValue }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

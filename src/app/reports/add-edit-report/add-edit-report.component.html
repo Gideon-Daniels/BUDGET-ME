@@ -6,15 +6,16 @@
   </div>
   <form [formGroup]="addEditForm" class="form-container" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>Title <span class="important">*</span></mat-label>
+      <mat-label>Title</mat-label>
       <input matInput placeholder="Name of your report" formControlName="title">
     </mat-form-field>
+    @if (addEditForm.controls['title'].hasError('maxlength')) {
+      <span>*Maximum length exceeded 30 characters</span>
+    }
 
     <mat-form-field appearance="outline" class="example-form" floatLabel="always">
-      <mat-label>Amount <span class="important">*</span></mat-label>
-      <input matInput placeholder="ex. R100" formControlName="amount">
-      <!--  todo only show prefix when input is touched-->
-      <!--    <span matTextPrefix>R&nbsp;</span>-->
+      <mat-label>Amount</mat-label>
+      <input type="number" matInput placeholder="ex. R100" formControlName="amount">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="example-form" floatLabel="always">
@@ -34,8 +35,8 @@
     <mat-form-field appearance="outline" floatLabel="always" class="example-form">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose your date">
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker-toggle class="date-icon" [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="year"></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline" floatLabel="always" class="example-form">
@@ -44,7 +45,10 @@
     </mat-form-field>
 
     <div class="btn-group">
-      <button class="btn btn-primary" mat-flat-button type="submit">CREATE REPORT</button>
+      <button class="btn btn-primary" mat-flat-button type="submit"
+              [disabled]="addEditForm.invalid || !addEditForm.touched"
+              [ngClass]="{'disabled': addEditForm.invalid || !addEditForm.touched}">CREATE REPORT
+      </button>
       <button class="btn btn-cancel" mat-flat-button color="warn" type="button" (click)="back()">CANCEL</button>
     </div>
 

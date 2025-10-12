@@ -33,15 +33,17 @@ export class DashboardComponent implements OnInit {
   selectedPeriod = 'overall';
   periodValues!: any[];
   dashboardSections!: { displayName: string; amount: string }[];
-  reportSummary!: SummaryReport;
+  summaryReport!: SummaryReport;
   filterControl = new FormControl('overall');
   readonly dialog = inject(MatDialog);
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {
-    this.api.getReportsSummary().subscribe((data: SummaryReport) => {
-      this.reportSummary = data;
-      this.periodValues = Object.keys(data);
+    this.api.loadReportsSummary();
+    this.api.summary$.subscribe((data: any) => {
+      if (!data) return;
+      this.summaryReport = data;
+      this.periodValues = this.sortPeriodValues(Object.keys(data));
       this.setDashboardSections();
     });
 
@@ -51,7 +53,8 @@ export class DashboardComponent implements OnInit {
   }
 
   setDashboardSections() {
-    const selectSummary = this.reportSummary[this.selectedPeriod];
+    const selectSummary = this.summaryReport[this.selectedPeriod];
+
     if (!selectSummary) return;
     this.dashboardSections = Object.keys(selectSummary).map((key: string) => {
       return {
@@ -66,6 +69,24 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('dialog was closed');
+    });
+  }
+
+  sortPeriodValues(data: string[]) {
+    return data.sort((a, b) => {
+      if (a === 'overall') return -1;
+      if (b === 'overall') return 1;
+
+      const [yearA, monthA] = a.split('-').map(Number);
+      const [yearB, monthB] = b.split('-').map(Number);
+
+      if (yearA !== yearB) return yearB - yearA;
+      if (monthA && monthB) return monthB - monthA;
+
+      if (!monthA && monthB) return -1;
+      if (monthA && !monthB) return 1;
+
+      return 0;
     });
   }
 }
