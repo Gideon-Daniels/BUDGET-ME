@@ -1,13 +1,18 @@
 <div id="dashboard-container">
-  <div class="left"></div>
+  <div class="left">
+    <button class="btn btn-primary" mat-flat-button (click)="openReportDialog()">
+      <mat-icon class="btnIcon">add</mat-icon>
+      add report
+    </button>
+  </div>
   <div class="middle">
     <h3>Select Summary</h3>
     <div class="dropdown">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Select Period</mat-label>
         <mat-select [(value)]="selectedPeriod" [formControl]="filterControl">
-          @for (option of periodValues; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
+          @for (periodValue of periodValues; track periodValue) {
+            <mat-option [value]="periodValue">{{ periodValue }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -16,14 +21,15 @@
       Summary : {{ selectedPeriod }}
     </h3>
     <div class="section-container">
-      @if (dashboardSections.length === 0) {
+      @if (!dashboardSections || dashboardSections.length === 0) {
         <mat-spinner class="loader"></mat-spinner>
       } @else {
-        <app-summary-card
-          *ngFor="let section of dashboardSections"
-          [title]="section.displayName"
-          [amount]="section.amount"
-        ></app-summary-card>
+        @for (section of dashboardSections; track section) {
+          <app-summary-card
+            [title]="section.displayName"
+            [amount]="section.amount"
+          ></app-summary-card>
+        }
       }
     </div>
     <div class="table">table</div>

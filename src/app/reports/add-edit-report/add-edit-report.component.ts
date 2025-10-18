@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  FormGroupDirective,
-  NgForm,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ErrorStateMatcher, MatOption } from '@angular/material/core';
-import { ReportsService } from '../reports.service';
-import { MatIcon } from '@angular/material/icon';
+import { MatOption } from '@angular/material/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import {
@@ -17,21 +13,10 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null,
-  ): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(
-      control &&
-      control.invalid &&
-      (control.dirty || control.touched || isSubmitted)
-    );
-  }
-}
+import { MatDialogRef } from '@angular/material/dialog';
+import { NgClass, NgForOf } from '@angular/common';
+import { ApiService } from '../../api.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-add-edit-report',
@@ -39,7 +24,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./add-edit-report.component.scss'],
   standalone: true,
   imports: [
-    MatIcon,
     MatLabel,
     ReactiveFormsModule,
     MatFormField,
@@ -49,18 +33,18 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     MatInput,
     MatDatepickerInput,
     MatOption,
+    NgForOf,
+    MatButton,
+    NgClass,
   ],
 })
 export class AddEditReportComponent implements OnInit {
   inEditMode: boolean = false;
-  addEditForm: FormGroup = new FormGroup({});
+  addEditForm!: FormGroup;
   types: string[] = ['Expense', 'Income'];
   categories: string[] = ['Salary', 'Home', 'Groceries'];
-
-  constructor(
-    private reportsService: ReportsService,
-    private router: Router,
-  ) {}
+  readonly dialogRef = inject(MatDialogRef<AddEditReportComponent>);
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -69,25 +53,27 @@ export class AddEditReportComponent implements OnInit {
   initForm() {
     this.inEditMode = false;
     this.addEditForm = new FormGroup({
-      title: new FormControl(''),
+      title: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(30),
+      ]),
+      amount: new FormControl('', [Validators.required]),
       category: new FormControl(this.categories[0]),
       type: new FormControl(this.types[0]),
-      date: new FormControl(''),
-      amount: new FormControl(''),
+      date: new FormControl('', [Validators.required]),
+      description: new FormControl(''),
     });
   }
 
   back() {
-    this.router.navigate(['/']);
+    this.dialogRef.close();
   }
 
   async onSubmit() {
-    // console.log(this.addEditForm.value.toISOString().slice(0, 10));
     const date = this.addEditForm.value.date.toString();
-    // format date
+
     this.addEditForm.value.date = new Date(date).toISOString().slice(0, 10);
-    this.reportsService.addReport(this.addEditForm.value);
-    console.log('form', this.addEditForm.value);
-    await this.router.navigate(['reports']);
+    this.apiService.addReport(this.addEditForm.value);
+    this.back();
   }
 }

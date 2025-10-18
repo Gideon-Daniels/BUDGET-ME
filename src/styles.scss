@@ -1,3 +1,22 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.snack-bar-overrides((
+    container-color: black,
+  ));
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+  min-width: 250px !important;
+  padding: 10px;
+  border-radius: 10px !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  text-align: center;
+}
+
 /* You can add global styles to this file, and also import other style files */
 * {
   margin: 0;
@@ -8,4 +27,18 @@
 html, body {
   height: 100%;
   font-family: Roboto, sans-serif;
+}
+
+
+.btn-primary {
+  background-color: black !important;
+  color: white !important;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: white !important;
+  color: black !important;
+  border: none;
+  cursor: pointer;
 }
