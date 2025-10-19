@@ -24,6 +24,7 @@
       @if (!dashboardSections || dashboardSections.length === 0) {
         <mat-spinner class="loader"></mat-spinner>
       } @else {
+        <!-- todo: fix NG0956: The configured tracking warning-->
         @for (section of dashboardSections; track section) {
           <app-summary-card
             [title]="section.displayName"
@@ -32,9 +33,9 @@
         }
       }
     </div>
-    <div class="table">table</div>
-  </div>
-  <div class="right">
+    <div class="table">
+      <app-reports-grid [dataSource]="reports"></app-reports-grid>
+    </div>
   </div>
 </div>
 

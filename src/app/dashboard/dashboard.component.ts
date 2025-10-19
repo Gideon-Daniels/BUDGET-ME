@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddEditReportComponent } from '../reports/add-edit-report/add-edit-report.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { ReportsGridComponent } from '../reports/reports-grid/reports-grid.component';
+import { Report } from '../reports/report.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +26,7 @@ import { MatIcon } from '@angular/material/icon';
     ReactiveFormsModule,
     MatButton,
     MatIcon,
+    ReportsGridComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -34,6 +37,7 @@ export class DashboardComponent implements OnInit {
   periodValues!: any[];
   dashboardSections!: { displayName: string; amount: string }[];
   summaryReport!: SummaryReport;
+  reports!: Report[];
   filterControl = new FormControl('overall');
   readonly dialog = inject(MatDialog);
   constructor(private api: ApiService) {}
@@ -43,12 +47,20 @@ export class DashboardComponent implements OnInit {
     this.api.summary$.subscribe((data: any) => {
       if (!data) return;
       this.summaryReport = data;
-      this.periodValues = this.sortPeriodValues(Object.keys(data));
+      this.periodValues = this.sortPeriodValues(
+        Object.keys(this.summaryReport),
+      );
       this.setDashboardSections();
+    });
+
+    this.api.reports$.subscribe((data: any) => {
+      if (!data) return;
+      this.reports = data;
     });
 
     this.filterControl.valueChanges.subscribe((_) => {
       this.setDashboardSections();
+      this.filterTable();
     });
   }
 
@@ -62,6 +74,10 @@ export class DashboardComponent implements OnInit {
         amount: selectSummary[key],
       };
     });
+  }
+
+  private filterTable() {
+    this.reports = this.api.filterReport(this.selectedPeriod);
   }
 
   openReportDialog() {

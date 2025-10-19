@@ -1,108 +1,46 @@
-<div class="header">
-  <button class="navigate" mat-button (click)="navigateToHome()">
-    <mat-icon>keyboard_backspace</mat-icon>
-    <mat-label>
-      Back
-    </mat-label>
-  </button>
-</div>
-
 <div class="content">
-  <div class="btn-group">
-    <button class="btn" color="accent" mat-button (click)="deleteReport()">
-      <mat-icon>delete</mat-icon>
-      <mat-label>DELETE</mat-label>
-    </button>
-    <button class="btn add-report" color="primary" mat-button (click)="addReport()">
-      <mat-icon>add</mat-icon>
-      <mat-label>ADD</mat-label>
-    </button>
-  </div>
-
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()"
-                      [aria-label]="checkboxLabel()">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)"
-                      [aria-label]="checkboxLabel(row)">
-        </mat-checkbox>
-      </td>
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category</th>
+      <td mat-cell *matCellDef="let element"> {{ element.category }}</td>
     </ng-container>
 
-    <!--    &lt;!&ndash; Title Column &ndash;&gt;-->
-    <!--    <ng-container matColumnDef="title">-->
-    <!--      <th mat-header-cell *matHeaderCellDef> Title</th>-->
-    <!--      <td mat-cell *matCellDef="let element"> {{ element.title }}</td>-->
-    <!--    </ng-container>-->
-
-    <!--    &lt;!&ndash; Category Column &ndash;&gt;-->
-    <!--    <ng-container matColumnDef="category">-->
-    <!--      <th mat-header-cell *matHeaderCellDef> Category</th>-->
-    <!--      <td mat-cell *matCellDef="let element"> {{ element.category }}</td>-->
-    <!--    </ng-container>-->
-
-    <!--    &lt;!&ndash; Type Column &ndash;&gt;-->
-    <!--    <ng-container matColumnDef="type">-->
-    <!--      <th mat-header-cell *matHeaderCellDef> Type</th>-->
-    <!--      <td mat-cell *matCellDef="let element"> {{ element.type }}</td>-->
-    <!--    </ng-container>-->
-
-    <!-- Date Column -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Date</th>
-      <td mat-cell *matCellDef="let element"> {{ element.date }}</td>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title</th>
+      <td mat-cell *matCellDef="let element"> {{ element.title }}</td>
     </ng-container>
 
-    <!-- Date Column -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef> description</th>
+      <th mat-header-cell *matHeaderCellDef> Description</th>
       <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
     </ng-container>
 
-    <!-- Date Column -->
-    <ng-container matColumnDef="income">
-      <th mat-header-cell *matHeaderCellDef> income</th>
-      <td mat-cell *matCellDef="let element"> {{ element.income }}</td>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount</th>
+      <td mat-cell *matCellDef="let element"> {{ element.amount }}</td>
     </ng-container>
 
-    <!-- Date Column -->
-    <ng-container matColumnDef="expense">
-      <th mat-header-cell *matHeaderCellDef> expense</th>
-      <td mat-cell *matCellDef="let element"> {{ element.expense }}</td>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> Type</th>
+      <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
     </ng-container>
 
-    <!--    &lt;!&ndash; Date Column &ndash;&gt;-->
-    <!--    <ng-container matColumnDef="balance" >-->
-    <!--      <th mat-header-cell *matHeaderCellDef> balance</th>-->
-    <!--      <td mat-cell *matCellDef="let element"> {{ element.balance }}</td>-->
-    <!--    </ng-container>-->
-
-    <!--    &lt;!&ndash;  Amount column  &ndash;&gt;-->
-    <!--    <ng-container matColumnDef="amount">-->
-    <!--      <th mat-header-cell *matHeaderCellDef> Amount</th>-->
-    <!--      <td mat-cell *matCellDef="let element"> {{ element.amount }}</td>-->
-    <!--    </ng-container>-->
-
-    <!-- Action Column -->
-    <ng-container matColumnDef="edit">
-      <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-icon-button matTooltip="Click to Edit" class="btn edit-button"
-                color="primary" (click)="edit()">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </mat-cell>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date | date: 'yyyy-MM-dd':'UTC' }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="btn-group">
+          <mat-icon class="btn icon-btn" (click)="editReport()">edit</mat-icon>
+          <mat-icon class="btn icon-btn" (click)="deleteReport()">close</mat-icon>
+
+        </div>
+      </td>
+
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>

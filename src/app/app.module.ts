@@ -18,7 +18,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -49,7 +48,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatListModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatCheckboxModule,

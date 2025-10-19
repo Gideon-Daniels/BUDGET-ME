@@ -9,8 +9,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ApiService {
   private reportsSummary: BehaviorSubject<any> = new BehaviorSubject(null);
+  private reports: BehaviorSubject<any> = new BehaviorSubject(null);
   summary$: Observable<{}> = this.reportsSummary.asObservable();
-
+  reports$: Observable<any> = this.reports.asObservable();
   private _snackbar = inject(MatSnackBar);
 
   constructor(private http: HttpClient) {}
@@ -19,16 +20,29 @@ export class ApiService {
     this.http
       .get<SummaryReport>('http://localhost:3000/api/v1/reports/summary')
       .subscribe((data: any) => {
-        console.log(data);
         this.reportsSummary.next(data);
       });
+  }
+
+  loadReports() {
+    this.http
+      .get<SummaryReport>('http://localhost:3000/api/v1/reports')
+      .subscribe((data: any) => {
+        this.reports.next(data);
+      });
+  }
+
+  filterReport(selectedPeriod: string) {
+    return this.reports.value.filter(
+      (element: any) =>
+        selectedPeriod === element.date.substring(0, selectedPeriod.length),
+    );
   }
 
   addReport(data: Report) {
     this.http
       .post('http://localhost:3000/api/v1/reports', data)
       .subscribe((value: any) => {
-        this.loadReportsSummary();
         this._snackbar.open(value.message, undefined, {
           duration: 5000,
           horizontalPosition: 'end',
@@ -36,12 +50,14 @@ export class ApiService {
         });
       });
     this.updateReportsSummary(data);
+    this.updateReports(data);
   }
 
   private updateReportsSummary(data: any) {
     if (!data || data.length === 0) return;
     const year = data.date.substring(0, 4);
     const yearMonth = data.date.substring(0, 7);
+    // todo fix immutability issue . We should not mutate value property
     if (!this.reportsSummary.value[yearMonth]) {
       this.reportsSummary.value[yearMonth] = {
         income: 0,
@@ -62,13 +78,19 @@ export class ApiService {
       this.reportsSummary.value[year].balance += data.amount;
       this.reportsSummary.value['overall'].income += data.amount;
       this.reportsSummary.value['overall'].balance += data.amount;
-      return;
+    } else {
+      this.reportsSummary.value[yearMonth].expense -= data.amount;
+      this.reportsSummary.value[yearMonth].balance -= data.amount;
+      this.reportsSummary.value[year].expense -= data.amount;
+      this.reportsSummary.value[year].balance -= data.amount;
+      this.reportsSummary.value['overall'].expense -= data.amount;
+      this.reportsSummary.value['overall'].balance -= data.amount;
     }
-    this.reportsSummary.value[yearMonth].expense -= data.amount;
-    this.reportsSummary.value[yearMonth].balance -= data.amount;
-    this.reportsSummary.value[year].expense -= data.amount;
-    this.reportsSummary.value[year].balance -= data.amount;
-    this.reportsSummary.value['overall'].expense -= data.amount;
-    this.reportsSummary.value['overall'].balance -= data.amount;
+
+    this.reportsSummary.next(this.reportsSummary.value);
+  }
+
+  private updateReports(data: Report) {
+    this.reports.next([data, ...this.reports.value]);
   }
 }
