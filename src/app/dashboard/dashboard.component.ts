@@ -55,6 +55,9 @@ export class DashboardComponent implements OnInit {
 
     this.api.reports$.subscribe((data: any) => {
       if (!data) return;
+      data.forEach((element: any) => {
+        element.date = new Date(element.date).toLocaleDateString('en-CA');
+      });
       this.reports = data;
     });
 

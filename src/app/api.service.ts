@@ -33,6 +33,7 @@ export class ApiService {
   }
 
   filterReport(selectedPeriod: string) {
+    if (selectedPeriod === 'overall') return this.reports.value;
     return this.reports.value.filter(
       (element: any) =>
         selectedPeriod === element.date.substring(0, selectedPeriod.length),
