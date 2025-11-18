@@ -33,7 +33,7 @@ export class DatabaseService {
   async fetchAllEntries(
     tableName: TableName,
   ): Promise<mysql.QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName}`;
+    const sql = `SELECT * FROM ${tableName} ORDER BY date DESC , created_at DESC`;
 
     try {
       const [result] = await this.dbConnection.query(sql);

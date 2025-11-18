@@ -65,15 +65,16 @@ export class AddEditReportComponent implements OnInit {
     });
   }
 
-  back() {
+  exitModal() {
     this.dialogRef.close();
   }
 
   async onSubmit() {
     const date = this.addEditForm.value.date.toString();
-
-    this.addEditForm.value.date = new Date(date).toISOString().slice(0, 10);
+    // todo : change date to be more dynamic depending on the browser timezone
+    this.addEditForm.value.date = new Date(date).toLocaleDateString('en-CA');
     this.apiService.addReport(this.addEditForm.value);
-    this.back();
+    console.log(this.addEditForm.value.date);
+    this.exitModal();
   }
 }

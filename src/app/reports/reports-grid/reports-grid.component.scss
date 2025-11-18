@@ -1,26 +1,16 @@
-
-.header {
-  margin: 10px;
-
-  .navigate {
-    font-size: 18px;
-    font-weight: bold;
-  }
-}
-
 .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-self: center;
-  padding: 10px 50px;
+  padding-right: 10px;
   gap: 15px;
 
   .btn-group {
     align-self: end;
 
     .btn {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: bold;
     }
 
@@ -29,18 +19,18 @@
     }
   }
 
-  .demo-table {
-    .mat-column-edit {
-      height: 56px;
-    }
+  .btn-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    .edit-button {
-      font-size: 16px;
+    .icon-btn {
+      text-align: center;
+      font-size: 20px;
+      cursor: pointer;
       color: black !important
     }
   }
-
-
 }
 
 

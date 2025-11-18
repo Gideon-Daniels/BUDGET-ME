@@ -1,81 +1,61 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ReportsService } from '../reports.service';
-import { Report } from '../report.model';
-import { SelectionModel } from '@angular/cdk/collections';
-import { PdfUploadService } from '../../pdf-upload-service.service';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  MatCell,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTableModule,
+} from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
-import { MatLabel } from '@angular/material/input';
-import { MatCell, MatHeaderCell, MatTable } from '@angular/material/table';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ApiService } from '../../api.service';
+import { Report } from '../report.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-reports-grid',
   templateUrl: './reports-grid.component.html',
   styleUrls: ['./reports-grid.component.scss'],
   standalone: true,
-  imports: [MatIcon, MatLabel, MatTable, MatCheckbox, MatHeaderCell, MatCell],
+  imports: [
+    MatTableModule,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatIcon,
+    DatePipe,
+  ],
 })
-export class ReportsGridComponent {
-  displayedColumns: string[] = ['date', 'description', 'income', 'expense'];
-  dataSource!: Report[];
-  selection = new SelectionModel<Report>(true, []);
-  total = 0;
+export class ReportsGridComponent implements OnInit {
+  @Input() dataSource!: any;
 
-  constructor(
-    private reportsService: ReportsService,
-    private pdfService: PdfUploadService,
-    private router: Router,
-  ) {
-    this.init();
-  }
+  displayedColumns: string[] = [
+    'title',
+    'date',
+    'type',
+    'category',
+    'description',
+    'amount',
+    'actions',
+  ];
 
-  init() {
-    // this.dataSource = this.reportsService.getReports();
-    const data = this.pdfService.pdfData;
-    console.log(data);
-    this.dataSource = data.rows;
-    data.rows.forEach((data: any) => {
-      console.log(data.expense);
-      if (!isNaN(parseFloat(data.income)))
-        this.total += parseFloat(data.income);
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.loadReports();
+    this.apiService.reports$.subscribe((data: Report[]) => {
+      if (!data) return;
+      console.log(data);
+      this.dataSource = data;
     });
-    console.log(this.total);
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource);
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Report): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.title + 1
-    }`;
-  }
-
-  async navigateToHome() {
-    await this.router.navigate(['/']);
-  }
-
-  async addReport() {
-    await this.router.navigate(['reports', 'add-edit-report']);
   }
 
   editReport() {
@@ -84,9 +64,5 @@ export class ReportsGridComponent {
 
   deleteReport() {
     console.log('reported deleted');
-  }
-
-  edit() {
-    console.log('editing report');
   }
 }
