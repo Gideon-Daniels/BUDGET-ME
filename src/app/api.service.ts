@@ -54,6 +54,20 @@ export class ApiService {
     this.updateReports(data);
   }
 
+  editReport(id: number, data: Report) {
+    this.http
+      .put(`http://localhost:3000/api/v1/reports/${id}`, data)
+      .subscribe((value: any) => {
+        this._snackbar.open(value.message, undefined, {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+      });
+    this.updateReportsSummary(data);
+    this.updateReports(data, id);
+  }
+
   private updateReportsSummary(data: any) {
     if (!data || data.length === 0) return;
     const year = data.date.substring(0, 4);
@@ -91,7 +105,14 @@ export class ApiService {
     this.reportsSummary.next(this.reportsSummary.value);
   }
 
-  private updateReports(data: Report) {
-    this.reports.next([data, ...this.reports.value]);
+  private updateReports(data: Report, id?: number) {
+    if (id) {
+      const filtered = this.reports.value.filter(
+        (report: Report) => report.id !== id,
+      );
+      this.reports.next([data, ...filtered]);
+    } else {
+      this.reports.next([data, ...this.reports.value]);
+    }
   }
 }

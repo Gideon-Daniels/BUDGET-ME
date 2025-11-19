@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -13,10 +13,11 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgClass, NgForOf } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { MatButton } from '@angular/material/button';
+import { Report } from '../../../../backend/src/models/Reports';
 
 @Component({
   selector: 'app-add-edit-report',
@@ -39,19 +40,38 @@ import { MatButton } from '@angular/material/button';
   ],
 })
 export class AddEditReportComponent implements OnInit {
-  inEditMode: boolean = false;
   addEditForm!: FormGroup;
-  types: string[] = ['Expense', 'Income'];
-  categories: string[] = ['Salary', 'Home', 'Groceries'];
+  types: string[] = ['expense', 'income'];
+  categories: string[] = [
+    'salary',
+    'home',
+    'groceries',
+    'entertainment',
+    'transport',
+    'work',
+  ];
   readonly dialogRef = inject(MatDialogRef<AddEditReportComponent>);
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    @Inject(MAT_DIALOG_DATA) public data: Report | null,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+    if (this.data && this.addEditForm) {
+      this.addEditForm.setValue({
+        title: this.data.title,
+        amount: this.data.amount,
+        category: this.data.category,
+        type: this.data.type,
+        date: this.data.date,
+        description: this.data.description,
+      });
+      this.addEditForm.markAsTouched();
+    }
   }
 
   initForm() {
-    this.inEditMode = false;
     this.addEditForm = new FormGroup({
       title: new FormControl('', [
         Validators.required,
@@ -73,8 +93,13 @@ export class AddEditReportComponent implements OnInit {
     const date = this.addEditForm.value.date.toString();
     // todo : change date to be more dynamic depending on the browser timezone
     this.addEditForm.value.date = new Date(date).toLocaleDateString('en-CA');
-    this.apiService.addReport(this.addEditForm.value);
-    console.log(this.addEditForm.value.date);
+    if (this.data) {
+      console.log(this.data?.id);
+
+      this.apiService.editReport(this.data.id, this.addEditForm.value);
+    } else {
+      this.apiService.addReport(this.addEditForm.value);
+    }
     this.exitModal();
   }
 }

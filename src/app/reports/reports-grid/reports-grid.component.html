@@ -34,9 +34,8 @@
       <th mat-header-cell *matHeaderCellDef> Actions</th>
       <td mat-cell *matCellDef="let element">
         <div class="btn-group">
-          <mat-icon class="btn icon-btn" (click)="editReport()">edit</mat-icon>
+          <mat-icon class="btn icon-btn" (click)="editReport(element)">edit</mat-icon>
           <mat-icon class="btn icon-btn" (click)="deleteReport()">close</mat-icon>
-
         </div>
       </td>
 
