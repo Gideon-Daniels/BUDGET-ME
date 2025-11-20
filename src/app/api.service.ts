@@ -51,12 +51,12 @@ export class ApiService {
         });
       });
     this.updateReportsSummary(data);
-    this.updateReports(data);
+    this.updateReports(data, 'add');
   }
 
-  editReport(id: number, data: Report) {
+  updateReport(data: Report) {
     this.http
-      .put(`http://localhost:3000/api/v1/reports/${id}`, data)
+      .put(`http://localhost:3000/api/v1/reports/${data.id}`, data)
       .subscribe((value: any) => {
         this._snackbar.open(value.message, undefined, {
           duration: 5000,
@@ -65,7 +65,7 @@ export class ApiService {
         });
       });
     this.updateReportsSummary(data);
-    this.updateReports(data, id);
+    this.updateReports(data, 'update');
   }
 
   private updateReportsSummary(data: any) {
@@ -105,10 +105,10 @@ export class ApiService {
     this.reportsSummary.next(this.reportsSummary.value);
   }
 
-  private updateReports(data: Report, id?: number) {
-    if (id) {
+  private updateReports(data: Report, mode: 'add' | 'update') {
+    if (mode === 'update') {
       const filtered = this.reports.value.filter(
-        (report: Report) => report.id !== id,
+        (report: Report) => report.id !== data.id,
       );
       this.reports.next([data, ...filtered]);
     } else {

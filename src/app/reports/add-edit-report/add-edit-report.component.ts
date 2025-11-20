@@ -40,6 +40,7 @@ import { Report } from '../../../../backend/src/models/Reports';
   ],
 })
 export class AddEditReportComponent implements OnInit {
+  isEditMode: boolean = false;
   addEditForm!: FormGroup;
   types: string[] = ['expense', 'income'];
   categories: string[] = [
@@ -59,6 +60,7 @@ export class AddEditReportComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     if (this.data && this.addEditForm) {
+      this.isEditMode = true;
       this.addEditForm.setValue({
         title: this.data.title,
         amount: this.data.amount,
@@ -93,10 +95,12 @@ export class AddEditReportComponent implements OnInit {
     const date = this.addEditForm.value.date.toString();
     // todo : change date to be more dynamic depending on the browser timezone
     this.addEditForm.value.date = new Date(date).toLocaleDateString('en-CA');
-    if (this.data) {
-      console.log(this.data?.id);
 
-      this.apiService.editReport(this.data.id, this.addEditForm.value);
+    if (this.isEditMode && this.data) {
+      this.apiService.updateReport({
+        id: this.data.id,
+        ...this.addEditForm.value,
+      });
     } else {
       this.apiService.addReport(this.addEditForm.value);
     }

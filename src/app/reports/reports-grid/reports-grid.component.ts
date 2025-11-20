@@ -60,7 +60,7 @@ export class ReportsGridComponent implements OnInit {
     });
   }
 
-  editReport(data: Report) {
+  updateReport(data: Report) {
     console.log('editing report');
     console.log(data);
     this.dialog.open(AddEditReportComponent, { data });

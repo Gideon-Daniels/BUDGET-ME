@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <mat-label>
-      Add Report
+      {{ isEditMode ? 'Update Report' : 'Add Report' }}
     </mat-label>
   </div>
   <form [formGroup]="addEditForm" class="form-container" (ngSubmit)="onSubmit()">
@@ -47,7 +47,7 @@
     <div class="btn-group">
       <button class="btn btn-primary" mat-flat-button type="submit"
               [disabled]="addEditForm.invalid || !addEditForm.touched"
-              [ngClass]="{'disabled': addEditForm.invalid || !addEditForm.touched}">CREATE REPORT
+              [ngClass]="{'disabled': addEditForm.invalid || !addEditForm.touched}"> {{ isEditMode ? 'UPDATE REPORT' : 'CREATE REPORT' }}
       </button>
       <button class="btn btn-cancel" mat-flat-button color="warn" type="button" (click)="exitModal()">CANCEL</button>
     </div>
