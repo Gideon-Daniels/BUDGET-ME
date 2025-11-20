@@ -1,5 +1,6 @@
 export interface Report {
-  // id: number;
+  title: string;
+  id: number;
   amount: number;
   type: 'income' | 'expense';
   category: string;

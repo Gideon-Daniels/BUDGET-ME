@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import {
   MatCell,
   MatColumnDef,
@@ -14,6 +14,8 @@ import { MatIcon } from '@angular/material/icon';
 import { ApiService } from '../../api.service';
 import { Report } from '../report.model';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditReportComponent } from '../add-edit-report/add-edit-report.component';
 
 @Component({
   selector: 'app-reports-grid',
@@ -46,7 +48,7 @@ export class ReportsGridComponent implements OnInit {
     'amount',
     'actions',
   ];
-
+  readonly dialog = inject(MatDialog);
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
@@ -58,8 +60,10 @@ export class ReportsGridComponent implements OnInit {
     });
   }
 
-  editReport() {
+  updateReport(data: Report) {
     console.log('editing report');
+    console.log(data);
+    this.dialog.open(AddEditReportComponent, { data });
   }
 
   deleteReport() {

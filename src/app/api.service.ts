@@ -51,7 +51,21 @@ export class ApiService {
         });
       });
     this.updateReportsSummary(data);
-    this.updateReports(data);
+    this.updateReports(data, 'add');
+  }
+
+  updateReport(data: Report) {
+    this.http
+      .put(`http://localhost:3000/api/v1/reports/${data.id}`, data)
+      .subscribe((value: any) => {
+        this._snackbar.open(value.message, undefined, {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+      });
+    this.updateReportsSummary(data);
+    this.updateReports(data, 'update');
   }
 
   private updateReportsSummary(data: any) {
@@ -91,7 +105,14 @@ export class ApiService {
     this.reportsSummary.next(this.reportsSummary.value);
   }
 
-  private updateReports(data: Report) {
-    this.reports.next([data, ...this.reports.value]);
+  private updateReports(data: Report, mode: 'add' | 'update') {
+    if (mode === 'update') {
+      const filtered = this.reports.value.filter(
+        (report: Report) => report.id !== data.id,
+      );
+      this.reports.next([data, ...filtered]);
+    } else {
+      this.reports.next([data, ...this.reports.value]);
+    }
   }
 }
