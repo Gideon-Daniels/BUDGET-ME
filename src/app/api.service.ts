@@ -50,8 +50,8 @@ export class ApiService {
           verticalPosition: 'top',
         });
       });
-    this.updateReportsSummary(data);
     this.updateReports(data, 'add');
+    this.updateReportsSummary(data);
   }
 
   updateReport(data: Report) {
@@ -64,12 +64,26 @@ export class ApiService {
           verticalPosition: 'top',
         });
       });
-    this.updateReportsSummary(data);
     this.updateReports(data, 'update');
+    this.updateReportsSummary(data);
   }
 
-  private updateReportsSummary(data: any) {
-    if (!data || data.length === 0) return;
+  deleteReport(data: Report) {
+    this.http
+      .delete(`http://localhost:3000/api/v1/reports/${data.id}`)
+      .subscribe((value: any) => {
+        this._snackbar.open(value.message, undefined, {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+      });
+    this.updateReports(data, 'delete');
+    this.updateReportsSummary(data);
+  }
+
+  private updateReportsSummary(data: Report) {
+    if (!data) return;
     const year = data.date.substring(0, 4);
     const yearMonth = data.date.substring(0, 7);
     // todo fix immutability issue . We should not mutate value property
@@ -105,14 +119,16 @@ export class ApiService {
     this.reportsSummary.next(this.reportsSummary.value);
   }
 
-  private updateReports(data: Report, mode: 'add' | 'update') {
-    if (mode === 'update') {
-      const filtered = this.reports.value.filter(
-        (report: Report) => report.id !== data.id,
-      );
+  private updateReports(data: Report, action: 'add' | 'update' | 'delete') {
+    const filtered = this.reports.value.filter(
+      (report: Report) => report.id !== data.id,
+    );
+    if (action === 'update') {
       this.reports.next([data, ...filtered]);
-    } else {
+    } else if (action === 'add') {
       this.reports.next([data, ...this.reports.value]);
+    } else {
+      this.reports.next([...filtered]);
     }
   }
 }

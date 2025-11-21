@@ -1,0 +1,14 @@
+<div class="dialog-container">
+
+  <h2 class="title">
+    Are you sure you want to delete the following <b>REPORT</b>
+  </h2>
+
+  <h1 class="report-name">{{ data.name }}</h1>
+
+  <div class="btn-group">
+    <button class="btn btn-cancel" mat-flat-button color="warn" type="button" (click)="close()">CANCEL</button>
+    <button class="btn btn-primary" mat-flat-button (click)="delete()">DELETE</button>
+  </div>
+
+</div>
