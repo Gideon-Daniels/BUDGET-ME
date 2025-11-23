@@ -6,13 +6,12 @@ import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { SummaryReport } from '../../../backend/src/models/Reports';
+import { Report, SummaryReport } from '../../../backend/src/models/Reports';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditReportComponent } from '../reports/add-edit-report/add-edit-report.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ReportsGridComponent } from '../reports/reports-grid/reports-grid.component';
-import { Report } from '../reports/report.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,7 +43,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.loadReportsSummary();
-    this.api.summary$.subscribe((data: any) => {
+    this.api.summary$.subscribe((data) => {
       if (!data) return;
       this.summaryReport = data;
       this.periodValues = this.sortPeriodValues(
@@ -53,9 +52,9 @@ export class DashboardComponent implements OnInit {
       this.setDashboardSections();
     });
 
-    this.api.reports$.subscribe((data: any) => {
+    this.api.reports$.subscribe((data) => {
       if (!data) return;
-      data.forEach((element: any) => {
+      data.forEach((element) => {
         element.date = new Date(element.date).toLocaleDateString('en-CA');
       });
       this.reports = data;

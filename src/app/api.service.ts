@@ -10,24 +10,25 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ApiService {
   private reportsSummary: BehaviorSubject<any> = new BehaviorSubject(null);
   private reports: BehaviorSubject<any> = new BehaviorSubject(null);
-  summary$: Observable<{}> = this.reportsSummary.asObservable();
-  reports$: Observable<any> = this.reports.asObservable();
   private _snackbar = inject(MatSnackBar);
+  summary$: Observable<SummaryReport> = this.reportsSummary.asObservable();
+  reports$: Observable<Report[]> = this.reports.asObservable();
 
   constructor(private http: HttpClient) {}
 
   loadReportsSummary() {
     this.http
       .get<SummaryReport>('http://localhost:3000/api/v1/reports/summary')
-      .subscribe((data: any) => {
+      .subscribe((data) => {
         this.reportsSummary.next(data);
       });
   }
 
   loadReports() {
     this.http
-      .get<SummaryReport>('http://localhost:3000/api/v1/reports')
-      .subscribe((data: any) => {
+      .get<Report[]>('http://localhost:3000/api/v1/reports')
+      .subscribe((data) => {
+        console.log(data);
         this.reports.next(data);
       });
   }
@@ -50,8 +51,9 @@ export class ApiService {
           verticalPosition: 'top',
         });
       });
+
     this.updateReports(data, 'add');
-    this.updateReportsSummary(data);
+    this.loadReportsSummary();
   }
 
   updateReport(data: Report) {
@@ -64,8 +66,9 @@ export class ApiService {
           verticalPosition: 'top',
         });
       });
+
     this.updateReports(data, 'update');
-    this.updateReportsSummary(data);
+    this.loadReportsSummary();
   }
 
   deleteReport(data: Report) {
@@ -79,44 +82,7 @@ export class ApiService {
         });
       });
     this.updateReports(data, 'delete');
-    this.updateReportsSummary(data);
-  }
-
-  private updateReportsSummary(data: Report) {
-    if (!data) return;
-    const year = data.date.substring(0, 4);
-    const yearMonth = data.date.substring(0, 7);
-    // todo fix immutability issue . We should not mutate value property
-    if (!this.reportsSummary.value[yearMonth]) {
-      this.reportsSummary.value[yearMonth] = {
-        income: 0,
-        expense: 0,
-        balance: 0,
-      };
-      this.reportsSummary.value[year] = {
-        income: 0,
-        expense: 0,
-        balance: 0,
-      };
-    }
-
-    if (data.type === 'income') {
-      this.reportsSummary.value[yearMonth].income += data.amount;
-      this.reportsSummary.value[yearMonth].balance += data.amount;
-      this.reportsSummary.value[year].income += data.amount;
-      this.reportsSummary.value[year].balance += data.amount;
-      this.reportsSummary.value['overall'].income += data.amount;
-      this.reportsSummary.value['overall'].balance += data.amount;
-    } else {
-      this.reportsSummary.value[yearMonth].expense -= data.amount;
-      this.reportsSummary.value[yearMonth].balance -= data.amount;
-      this.reportsSummary.value[year].expense -= data.amount;
-      this.reportsSummary.value[year].balance -= data.amount;
-      this.reportsSummary.value['overall'].expense -= data.amount;
-      this.reportsSummary.value['overall'].balance -= data.amount;
-    }
-
-    this.reportsSummary.next(this.reportsSummary.value);
+    this.loadReportsSummary();
   }
 
   private updateReports(data: Report, action: 'add' | 'update' | 'delete') {

@@ -1,7 +1,7 @@
 export interface Report {
   title: string;
   id: number;
-  amount: number;
+  amount: string;
   type: 'income' | 'expense';
   category: string;
   date: string; // ISO format (e.g., "2025-08-30")
