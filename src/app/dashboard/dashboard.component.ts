@@ -45,10 +45,9 @@ export class DashboardComponent implements OnInit {
     this.api.loadReportsSummary();
     this.api.summary$.subscribe((data) => {
       if (!data) return;
+      console.log(data);
       this.summaryReport = data;
-      this.periodValues = this.sortPeriodValues(
-        Object.keys(this.summaryReport),
-      );
+      this.sortPeriodValues(Object.keys(this.summaryReport));
       this.setDashboardSections();
     });
 
@@ -58,6 +57,9 @@ export class DashboardComponent implements OnInit {
         element.date = new Date(element.date).toLocaleDateString('en-CA');
       });
       this.reports = data;
+      this.filterTable();
+      console.log('this.summaryReport', this.summaryReport);
+      this.sortPeriodValues(Object.keys(this.summaryReport));
     });
 
     this.filterControl.valueChanges.subscribe((_) => {
@@ -68,6 +70,7 @@ export class DashboardComponent implements OnInit {
 
   setDashboardSections() {
     const selectSummary = this.summaryReport[this.selectedPeriod];
+    console.log('selectSummary', selectSummary);
 
     if (!selectSummary) return;
     this.dashboardSections = Object.keys(selectSummary).map((key: string) => {
@@ -91,7 +94,7 @@ export class DashboardComponent implements OnInit {
   }
 
   sortPeriodValues(data: string[]) {
-    return data.sort((a, b) => {
+    this.periodValues = data.sort((a, b) => {
       if (a === 'overall') return -1;
       if (b === 'overall') return 1;
 

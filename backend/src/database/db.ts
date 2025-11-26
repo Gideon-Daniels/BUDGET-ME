@@ -1,4 +1,8 @@
-import mysql, { QueryResult, RowDataPacket } from 'mysql2/promise';
+import mysql, {
+  QueryResult,
+  ResultSetHeader,
+  RowDataPacket,
+} from 'mysql2/promise';
 import { Report } from '../models/Reports.ts';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
@@ -27,7 +31,9 @@ export class DatabaseService {
     const placeholders = values.map(() => '?');
     const sql = `INSERT INTO ${tableName}(${columns})
                  VALUES (${placeholders})`;
-    await this.dbConnection.execute(sql, values);
+
+    const [res] = await this.dbConnection.execute<ResultSetHeader>(sql, values);
+    return res.insertId;
   }
 
   async fetchAllEntries(tableName: TableName): Promise<Report[] | undefined> {

@@ -28,7 +28,6 @@ export class ApiService {
     this.http
       .get<Report[]>('http://localhost:3000/api/v1/reports')
       .subscribe((data) => {
-        console.log(data);
         this.reports.next(data);
       });
   }
@@ -44,8 +43,9 @@ export class ApiService {
   addReport(data: Report) {
     this.http
       .post('http://localhost:3000/api/v1/reports', data)
-      .subscribe((value: any) => {
-        this._snackbar.open(value.message, undefined, {
+      .subscribe((response: any) => {
+        data.id = response.id;
+        this._snackbar.open(response.message, undefined, {
           duration: 5000,
           horizontalPosition: 'end',
           verticalPosition: 'top',

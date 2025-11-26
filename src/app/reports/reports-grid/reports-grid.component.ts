@@ -56,7 +56,6 @@ export class ReportsGridComponent implements OnInit {
     this.apiService.loadReports();
     this.apiService.reports$.subscribe((data: Report[]) => {
       if (!data) return;
-      console.log(data);
       this.dataSource = data;
     });
   }
@@ -66,6 +65,7 @@ export class ReportsGridComponent implements OnInit {
   }
 
   deleteReport(report: Report) {
+    console.log('deletereport', report);
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: '520px',
       data: { name: report.title },
