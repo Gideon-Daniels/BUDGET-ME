@@ -3,8 +3,8 @@ import { db } from '../app.js';
 
 export async function addReport(req: Request, res: Response) {
   try {
-    await db.addEntry('reports', req.body);
-    res.status(200).json({ message: 'successful' });
+    const id = await db.addEntry('reports', req.body);
+    res.status(200).json({ message: 'successful', id });
   } catch (e: any) {
     console.log(e);
     res

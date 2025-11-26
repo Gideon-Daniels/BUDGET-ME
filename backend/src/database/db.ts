@@ -1,4 +1,8 @@
-import mysql, { QueryResult, RowDataPacket } from 'mysql2/promise';
+import mysql, {
+  QueryResult,
+  ResultSetHeader,
+  RowDataPacket,
+} from 'mysql2/promise';
 import { Report } from '../models/Reports.ts';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
@@ -27,17 +31,19 @@ export class DatabaseService {
     const placeholders = values.map(() => '?');
     const sql = `INSERT INTO ${tableName}(${columns})
                  VALUES (${placeholders})`;
-    await this.dbConnection.execute(sql, values);
+
+    const [res] = await this.dbConnection.execute<ResultSetHeader>(sql, values);
+    return res.insertId;
   }
 
-  async fetchAllEntries(
-    tableName: TableName,
-  ): Promise<mysql.QueryResult | undefined> {
-    const sql = `SELECT * FROM ${tableName} ORDER BY date DESC , created_at DESC`;
+  async fetchAllEntries(tableName: TableName): Promise<Report[] | undefined> {
+    const sql = `SELECT * FROM ${tableName} ORDER BY date DESC, created_at DESC`;
 
     try {
-      const [result] = await this.dbConnection.query(sql);
-      return result;
+      const [rows] =
+        await this.dbConnection.query<(Report & RowDataPacket)[]>(sql);
+
+      return rows;
     } catch (e) {
       console.log(e);
       return;
@@ -133,9 +139,9 @@ export class DatabaseService {
       result.forEach((item) => {
         Object.assign(res, {
           [item.period]: {
-            income: item.Income,
-            expense: item.Expense,
-            balance: item.Balance,
+            income: Number(item.Income),
+            expense: Number(item.Expense),
+            balance: Number(item.Balance),
           },
         });
       });

@@ -10,24 +10,24 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ApiService {
   private reportsSummary: BehaviorSubject<any> = new BehaviorSubject(null);
   private reports: BehaviorSubject<any> = new BehaviorSubject(null);
-  summary$: Observable<{}> = this.reportsSummary.asObservable();
-  reports$: Observable<any> = this.reports.asObservable();
   private _snackbar = inject(MatSnackBar);
+  summary$: Observable<SummaryReport> = this.reportsSummary.asObservable();
+  reports$: Observable<Report[]> = this.reports.asObservable();
 
   constructor(private http: HttpClient) {}
 
   loadReportsSummary() {
     this.http
       .get<SummaryReport>('http://localhost:3000/api/v1/reports/summary')
-      .subscribe((data: any) => {
+      .subscribe((data) => {
         this.reportsSummary.next(data);
       });
   }
 
   loadReports() {
     this.http
-      .get<SummaryReport>('http://localhost:3000/api/v1/reports')
-      .subscribe((data: any) => {
+      .get<Report[]>('http://localhost:3000/api/v1/reports')
+      .subscribe((data) => {
         this.reports.next(data);
       });
   }
@@ -43,15 +43,17 @@ export class ApiService {
   addReport(data: Report) {
     this.http
       .post('http://localhost:3000/api/v1/reports', data)
-      .subscribe((value: any) => {
-        this._snackbar.open(value.message, undefined, {
+      .subscribe((response: any) => {
+        data.id = response.id;
+        this._snackbar.open(response.message, undefined, {
           duration: 5000,
           horizontalPosition: 'end',
           verticalPosition: 'top',
         });
       });
-    this.updateReportsSummary(data);
+
     this.updateReports(data, 'add');
+    this.loadReportsSummary();
   }
 
   updateReport(data: Report) {
@@ -64,55 +66,35 @@ export class ApiService {
           verticalPosition: 'top',
         });
       });
-    this.updateReportsSummary(data);
+
     this.updateReports(data, 'update');
+    this.loadReportsSummary();
   }
 
-  private updateReportsSummary(data: any) {
-    if (!data || data.length === 0) return;
-    const year = data.date.substring(0, 4);
-    const yearMonth = data.date.substring(0, 7);
-    // todo fix immutability issue . We should not mutate value property
-    if (!this.reportsSummary.value[yearMonth]) {
-      this.reportsSummary.value[yearMonth] = {
-        income: 0,
-        expense: 0,
-        balance: 0,
-      };
-      this.reportsSummary.value[year] = {
-        income: 0,
-        expense: 0,
-        balance: 0,
-      };
-    }
-
-    if (data.type === 'income') {
-      this.reportsSummary.value[yearMonth].income += data.amount;
-      this.reportsSummary.value[yearMonth].balance += data.amount;
-      this.reportsSummary.value[year].income += data.amount;
-      this.reportsSummary.value[year].balance += data.amount;
-      this.reportsSummary.value['overall'].income += data.amount;
-      this.reportsSummary.value['overall'].balance += data.amount;
-    } else {
-      this.reportsSummary.value[yearMonth].expense -= data.amount;
-      this.reportsSummary.value[yearMonth].balance -= data.amount;
-      this.reportsSummary.value[year].expense -= data.amount;
-      this.reportsSummary.value[year].balance -= data.amount;
-      this.reportsSummary.value['overall'].expense -= data.amount;
-      this.reportsSummary.value['overall'].balance -= data.amount;
-    }
-
-    this.reportsSummary.next(this.reportsSummary.value);
+  deleteReport(data: Report) {
+    this.http
+      .delete(`http://localhost:3000/api/v1/reports/${data.id}`)
+      .subscribe((value: any) => {
+        this._snackbar.open(value.message, undefined, {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+      });
+    this.updateReports(data, 'delete');
+    this.loadReportsSummary();
   }
 
-  private updateReports(data: Report, mode: 'add' | 'update') {
-    if (mode === 'update') {
-      const filtered = this.reports.value.filter(
-        (report: Report) => report.id !== data.id,
-      );
+  private updateReports(data: Report, action: 'add' | 'update' | 'delete') {
+    const filtered = this.reports.value.filter(
+      (report: Report) => report.id !== data.id,
+    );
+    if (action === 'update') {
       this.reports.next([data, ...filtered]);
-    } else {
+    } else if (action === 'add') {
       this.reports.next([data, ...this.reports.value]);
+    } else {
+      this.reports.next([...filtered]);
     }
   }
 }
