@@ -3,15 +3,15 @@ import mysql from 'mysql2/promise';
 
 async function seed() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'budget_me_app',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_DATABASE || 'budget_me_app',
     multipleStatements: true,
   });
-  const fileNames = await fs.readdir('seeds');
+  const fileNames = await fs.readdir('src/database/seeds');
   for (const filename of fileNames) {
-    const sql = await fs.readFile(`seeds/${filename}`, 'utf8');
+    const sql = await fs.readFile(`src/database/seeds/${filename}`, 'utf8');
     console.log(sql);
     await connection.query(sql);
   }
