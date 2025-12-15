@@ -53,5 +53,6 @@ package-lock.json
 /backend/eng.traineddata
 /backend/dist/
 
-.env.dev
-.env.prod
+# Environment files
+/.env.prod
+/.env.dev
