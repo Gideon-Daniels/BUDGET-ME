@@ -8,6 +8,11 @@
     "docker-dev-build": "docker compose --env-file .env.dev  --profile dev  up --build",
     "docker-start-dev": "docker compose --env-file .env.dev --profile dev up",
     "docker-seed-dev": "docker compose --env-file .env.dev --profile dev run --rm backend npm run seed",
+    "docker-prod-build": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up --build -d",
+    "docker-start-prod": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up -d",
+    "docker-stop-prod": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml down",
+    "docker-end-prod": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml down -v",
+    "docker-shell-frontend": "docker exec -it prod-frontend-1 sh",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

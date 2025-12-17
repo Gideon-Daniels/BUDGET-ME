@@ -3,7 +3,7 @@ import mysql, {
   ResultSetHeader,
   RowDataPacket,
 } from 'mysql2/promise';
-import { Report } from '../models/Reports.ts';
+import { Report } from '../models/Reports.js';
 import { Transaction_statements } from '../models/Transaction_statements.js';
 
 type TableName = 'transaction_statements' | 'reports';
