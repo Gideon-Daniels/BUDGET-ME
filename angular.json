@@ -64,8 +64,13 @@
             "production": {
               "buildTarget": "budget-me:build:production"
             },
+            "local": {
+              "buildTarget": "budget-me:build:development",
+              "proxyConfig": "proxy.local.json"
+            },
             "development": {
-              "buildTarget": "budget-me:build:development"
+              "buildTarget": "budget-me:build:development",
+              "proxyConfig": "proxy.docker.json"
             }
           },
           "defaultConfiguration": "development"

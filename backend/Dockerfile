@@ -40,4 +40,4 @@ COPY --from=build --chown=node:node /app/dist ./dist
 
 USER node
 EXPOSE 3000
-CMD ["node", "dist/app.js"]
+CMD ["node", "dist/server.js"]

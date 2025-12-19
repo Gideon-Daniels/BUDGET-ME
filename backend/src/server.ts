@@ -1,5 +1,8 @@
 import { app } from './app.js';
 
-app.listen(3000, () => {
-  console.log('started server on localhost:3000');
+const PORT = Number(process.env.PORT) || 3000; // convert string to number
+const HOST = process.env.HOST || 'localhost';
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server started on http://${HOST}:${PORT}`);
 });

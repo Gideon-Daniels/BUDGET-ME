@@ -36,6 +36,8 @@ services:
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_DATABASE: ${MYSQL_DATABASE}
+      PORT: ${PORT}
+      HOST: ${HOST}
     depends_on:
       database:
         condition: service_healthy
@@ -59,12 +61,11 @@ services:
 
   migrate:
     image: backend-prod
-    command: npm run migrate
+    command: npm run migrate-prod
     build:
-      target: prod
       context: ./backend
       dockerfile: Dockerfile
-
+      target: prod
     depends_on:
       database:
         condition: service_healthy
@@ -75,7 +76,6 @@ services:
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_DATABASE: ${MYSQL_DATABASE}
     restart: "no"
-    profiles: [ "tools" ]
     networks:
       - prod_internal
 

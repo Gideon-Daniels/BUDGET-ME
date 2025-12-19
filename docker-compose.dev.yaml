@@ -34,6 +34,8 @@ services:
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_DATABASE: ${MYSQL_DATABASE}
+      PORT: ${PORT}
+      HOST: ${HOST}
     depends_on:
       database:
         condition: service_healthy
