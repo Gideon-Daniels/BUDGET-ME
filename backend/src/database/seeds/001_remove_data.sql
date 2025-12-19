@@ -1,5 +1,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+TRUNCATE TABLE transaction_statements;
 TRUNCATE TABLE reports;
 
-TRUNCATE TABLE transaction_statements;
+SET FOREIGN_KEY_CHECKS = 1;

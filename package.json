@@ -9,7 +9,6 @@
     "docker-dev-start": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml start ",
     "docker-dev-stop": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml stop",
     "docker-dev-remove": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml down -v",
-    "docker-dev-seed-db": "docker compose --env-file .env.dev --profile dev run --rm backend npm run seed",
     "docker-prod-build": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up --build ",
     "docker-prod-start": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up",
     "docker-prod-stop": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml down",

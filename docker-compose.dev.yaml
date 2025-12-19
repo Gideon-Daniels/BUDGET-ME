@@ -71,5 +71,25 @@ services:
       DB_DATABASE: ${MYSQL_DATABASE}
     restart: "no"
 
+  seed:
+    image: backend-dev
+    command: npm run seed
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: dev
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      database:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DB_HOST: database
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_DATABASE: ${MYSQL_DATABASE}
+    restart: "no"
+
 volumes:
   mysql_data_dev:
