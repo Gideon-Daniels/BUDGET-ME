@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config } from './db.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,13 +12,7 @@ async function seed() {
   if (process.env.NODE_ENV !== 'development') {
     throw new Error('Seeding is disabled outside development');
   }
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_DATABASE || 'budget_me_app',
-    multipleStatements: true,
-  });
+  const connection = await mysql.createConnection(config);
 
   const fileNames = (await fs.readdir(seedsDir))
     .filter((f) => f.endsWith('.sql'))

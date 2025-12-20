@@ -5,6 +5,7 @@ import mysql, {
 } from 'mysql2/promise';
 import { Report } from '../models/Reports.js';
 import { Transaction_statements } from '../models/Transaction_statements.js';
+import { config } from './db.config.js';
 
 type TableName = 'transaction_statements' | 'reports';
 
@@ -23,12 +24,7 @@ export class DatabaseService {
       try {
         console.log(`⏳ DB not ready, retry ${i}/${MAX_RETRIES}`);
 
-        this.dbConnection = await mysql.createConnection({
-          host: process.env.DB_HOST || 'localhost',
-          user: process.env.DB_USER || 'root',
-          password: process.env.DB_PASSWORD || '',
-          database: process.env.DB_DATABASE || 'budget_me_app',
-        });
+        this.dbConnection = await mysql.createConnection(config);
 
         console.log('Database connected');
         return; // EXIT LOOP ON SUCCESS
