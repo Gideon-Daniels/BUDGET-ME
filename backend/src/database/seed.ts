@@ -8,6 +8,9 @@ const __dirname = path.dirname(__filename);
 const seedsDir = path.join(__dirname, 'seeds');
 
 async function seed() {
+  if (process.env.NODE_ENV !== 'development') {
+    throw new Error('Seeding is disabled outside development');
+  }
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
