@@ -3,8 +3,9 @@ import mysql, {
   ResultSetHeader,
   RowDataPacket,
 } from 'mysql2/promise';
-import { Report } from '../models/Reports.ts';
+import { Report } from '../models/Reports.js';
 import { Transaction_statements } from '../models/Transaction_statements.js';
+import { config } from './db.config.js';
 
 type TableName = 'transaction_statements' | 'reports';
 
@@ -16,12 +17,24 @@ export class DatabaseService {
   }
 
   async start() {
-    this.dbConnection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'budget_me_app',
-    });
+    const MAX_RETRIES = 20;
+    const DELAY_MS = 3000;
+
+    for (let i = 1; i <= MAX_RETRIES; i++) {
+      try {
+        console.log(`⏳ DB not ready, retry ${i}/${MAX_RETRIES}`);
+
+        this.dbConnection = await mysql.createConnection(config);
+
+        console.log('Database connected');
+        return; // EXIT LOOP ON SUCCESS
+      } catch (e) {
+        console.error('DB connection failed:', (e as Error).message);
+        await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+      }
+    }
+
+    throw new Error('Database not reachable after retries');
   }
 
   async addEntry(tableName: TableName, data: Report | Transaction_statements) {
@@ -37,7 +50,9 @@ export class DatabaseService {
   }
 
   async fetchAllEntries(tableName: TableName): Promise<Report[] | undefined> {
-    const sql = `SELECT * FROM ${tableName} ORDER BY date DESC, created_at DESC`;
+    const sql = `SELECT *
+                 FROM ${tableName}
+                 ORDER BY date DESC, created_at DESC`;
 
     try {
       const [rows] =

@@ -1,10 +1,20 @@
 {
   "name": "budget-me",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration production",
+    "start": "ng serve --configuration=production",
     "build": "ng build",
+    "docker-dev-build": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml up --build ",
+    "docker-dev-start": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml start ",
+    "docker-dev-stop": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml stop",
+    "docker-dev-remove": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml down -v",
+    "docker-prod-build": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up --build ",
+    "docker-prod-start": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml up",
+    "docker-prod-stop": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml down",
+    "docker-prod-remove": "docker compose -p prod --env-file .env.prod -f docker-compose.prod.yaml down -v",
+    "docker-shell-frontend": "docker exec -it prod-frontend-1 sh",
+    "docker-shell-backend": "docker exec -it prod-backend-1 sh",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

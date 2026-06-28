@@ -18,18 +18,16 @@ export class ApiService {
 
   loadReportsSummary() {
     this.http
-      .get<SummaryReport>('http://localhost:3000/api/v1/reports/summary')
+      .get<SummaryReport>('/api/v1/reports/summary')
       .subscribe((data) => {
         this.reportsSummary.next(data);
       });
   }
 
   loadReports() {
-    this.http
-      .get<Report[]>('http://localhost:3000/api/v1/reports')
-      .subscribe((data) => {
-        this.reports.next(data);
-      });
+    this.http.get<Report[]>('/api/v1/reports').subscribe((data) => {
+      this.reports.next(data);
+    });
   }
 
   filterReport(selectedPeriod: string) {
@@ -41,16 +39,14 @@ export class ApiService {
   }
 
   addReport(data: Report) {
-    this.http
-      .post('http://localhost:3000/api/v1/reports', data)
-      .subscribe((response: any) => {
-        data.id = response.id;
-        this._snackbar.open(response.message, undefined, {
-          duration: 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-        });
+    this.http.post('/api/v1/reports', data).subscribe((response: any) => {
+      data.id = response.id;
+      this._snackbar.open(response.message, undefined, {
+        duration: 5000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
       });
+    });
 
     this.updateReports(data, 'add');
     this.loadReportsSummary();
@@ -58,7 +54,7 @@ export class ApiService {
 
   updateReport(data: Report) {
     this.http
-      .put(`http://localhost:3000/api/v1/reports/${data.id}`, data)
+      .put(`/api/v1/reports/${data.id}`, data)
       .subscribe((value: any) => {
         this._snackbar.open(value.message, undefined, {
           duration: 5000,
@@ -72,15 +68,13 @@ export class ApiService {
   }
 
   deleteReport(data: Report) {
-    this.http
-      .delete(`http://localhost:3000/api/v1/reports/${data.id}`)
-      .subscribe((value: any) => {
-        this._snackbar.open(value.message, undefined, {
-          duration: 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-        });
+    this.http.delete(`/api/v1/reports/${data.id}`).subscribe((value: any) => {
+      this._snackbar.open(value.message, undefined, {
+        duration: 5000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
       });
+    });
     this.updateReports(data, 'delete');
     this.loadReportsSummary();
   }
