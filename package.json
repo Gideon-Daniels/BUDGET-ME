@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration=local",
+    "start": "ng serve --configuration=production",
     "build": "ng build",
     "docker-dev-build": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml up --build ",
     "docker-dev-start": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml start ",
