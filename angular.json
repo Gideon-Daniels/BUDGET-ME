@@ -19,7 +19,7 @@
           "options": {
             "allowedCommonJsDependencies": [],
             "outputPath": {
-              "base": "dist"
+              "base": "dist/budget-me"
             },
             "index": "src/index.html",
             "polyfills": [
