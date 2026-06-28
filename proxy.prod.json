@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "https://budget-me-backend.onrender.com:3000",
+    "secure": false
+  }
+}
