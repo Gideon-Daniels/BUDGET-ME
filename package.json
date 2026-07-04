@@ -4,9 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=production",
-    "start-dev": "node scripts/configure.js local && ng serve",
-    "build:render": "node scripts/configure.js render && ng build",
-    "build:railway": "node scripts/configure.js railway && ng build",
     "build": "ng build",
     "docker-dev-build": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml up --build ",
     "docker-dev-start": "docker compose -p dev --env-file .env.dev -f docker-compose.dev.yaml start ",

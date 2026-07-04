@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://budget-me-backend.onrender.com:3000",
+    "target": "budget-me-production.up.railway.app",
     "secure": false
   }
 }
