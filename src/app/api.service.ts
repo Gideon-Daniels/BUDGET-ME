@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Report, SummaryReport } from '../../backend/src/models/Reports';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AppConfig } from '../../deployment/app-config.active';
 
 @Injectable({
   providedIn: 'root',
@@ -18,14 +19,14 @@ export class ApiService {
 
   loadReportsSummary() {
     this.http
-      .get<SummaryReport>('/api/v1/reports/summary')
+      .get<SummaryReport>(`${AppConfig.apiUrl}/api/v1/reports/summary`)
       .subscribe((data) => {
         this.reportsSummary.next(data);
       });
   }
 
   loadReports() {
-    this.http.get<Report[]>('/api/v1/reports').subscribe((data) => {
+    this.http.get<Report[]>(`${AppConfig.apiUrl}/api/v1/reports`).subscribe((data) => {
       this.reports.next(data);
     });
   }
@@ -39,7 +40,7 @@ export class ApiService {
   }
 
   addReport(data: Report) {
-    this.http.post('/api/v1/reports', data).subscribe((response: any) => {
+    this.http.post(`${AppConfig.apiUrl}/api/v1/reports`, data).subscribe((response: any) => {
       data.id = response.id;
       this._snackbar.open(response.message, undefined, {
         duration: 5000,
@@ -54,7 +55,7 @@ export class ApiService {
 
   updateReport(data: Report) {
     this.http
-      .put(`/api/v1/reports/${data.id}`, data)
+      .put(`${AppConfig.apiUrl}/api/v1/reports/${data.id}`, data)
       .subscribe((value: any) => {
         this._snackbar.open(value.message, undefined, {
           duration: 5000,
@@ -68,7 +69,7 @@ export class ApiService {
   }
 
   deleteReport(data: Report) {
-    this.http.delete(`/api/v1/reports/${data.id}`).subscribe((value: any) => {
+    this.http.delete(`${AppConfig.apiUrl}/api/v1/reports/${data.id}`).subscribe((value: any) => {
       this._snackbar.open(value.message, undefined, {
         duration: 5000,
         horizontalPosition: 'end',
