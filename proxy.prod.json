@@ -1,6 +1,0 @@
-{
-  "/api": {
-    "target": "https://budget-me-production.up.railway.app",
-    "secure": false
-  }
-}
