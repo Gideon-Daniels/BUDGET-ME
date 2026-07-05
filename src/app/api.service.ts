@@ -13,7 +13,7 @@ export class ApiService {
   private _snackbar = inject(MatSnackBar);
   summary$: Observable<SummaryReport> = this.reportsSummary.asObservable();
   reports$: Observable<Report[]> = this.reports.asObservable();
-  private url = 'https:budget-me-production.up.railway.app';
+  private url = 'https://budget-me-production.up.railway.app';
   constructor(private http: HttpClient) {}
 
   loadReportsSummary() {
